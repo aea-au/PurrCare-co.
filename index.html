@@ -389,7 +389,6 @@
       .services-row1, .services-row2 { grid-template-columns:1fr; }
       .footer-body { grid-template-columns:1fr; padding:40px 28px 0; }
       .footer-bottom { flex-direction:column; gap:8px; padding:18px 28px; }
-      .navbar { background: url('head.jpg') center/cover no-repeat; min-height: 100px;}
     }
     @media (max-width:960px) {
   .navbar { padding:14px 20px; min-height:90px; }
@@ -401,9 +400,8 @@
   .svc-card.wide .svc-card-body { align-items:center; text-align:center; }
   .footer-body { grid-template-columns:1fr 1fr; padding:40px 32px 0; }
 }
-
 @media (max-width:600px) {
-  .navbar { padding:12px 16px; min-height:100px; }
+  .navbar { padding:12px 16px; min-height:auto; }
   .nav-capsule { padding:10px 16px; gap:8px; border-radius:16px; width:100%; justify-content:center; }
   .nav-capsule a { font-size:10px; letter-spacing:0; }
   .nav-capsule a.active { padding:4px 10px; }
@@ -425,11 +423,11 @@
   .footer-body { grid-template-columns:1fr 1fr; padding:36px 20px 0; gap:20px; }
   .footer-bottom { flex-direction:column; gap:8px; padding:18px 20px; text-align:center; }
 }
-
 @media (max-width:380px) {
   .nav-capsule a { font-size:9px; }
   .cats-grid { grid-template-columns:1fr; }
   .animals-grid { grid-template-columns:1fr; }
+
 }
   </style>
 </head>
