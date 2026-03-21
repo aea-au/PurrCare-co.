@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PurrCare co. — Pet-tures Gallery</title>
+  <style>
+    @font-face { font-family:'Good Pawoo'; src:url('Good Pawoo - Display.ttf'); }
+    @font-face { font-family:'Calli Cat';  src:url('Calli Cat.ttf'); }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --blue:    #2E86C1;
+      --bluedark:#1A5276;
+      --gold:    #F39C12;
+      --coral:   #FF6B6B;
+      --mint:    #2ECC71;
+      --purple:  #9B59B6;
+      --sky:     #56CCF2;
+      --yellow:  #FFE066;
+      --peach:   #FFD6BA;
+      --white:   #FFFFFF;
+      --ink:     #1c3d56;
+    }
+
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:'Calli Cat', sans-serif;
+      background:#FFFBF4; color:var(--ink); overflow-x:hidden;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      display:flex; align-items:center; justify-content:center;
+      padding:18px 40px;
+      background:url('head.jpg') center/cover no-repeat;
+      min-height:120px; position:relative;
+    }
+    .nav-capsule {
+      background:rgba(255,255,255,0.96);
+      border-radius:999px; padding:12px 40px;
+      display:flex; gap:32px; align-items:center;
+      border:3px solid var(--gold);
+      box-shadow:5px 5px 0 var(--gold);
+      position:relative; z-index:2;
+    }
+    .nav-capsule a {
+      text-decoration:none; font-size:13px; color:var(--gold);
+      font-weight:900; text-transform:uppercase; letter-spacing:.5px; transition:color .2s;
+    }
+    .nav-capsule a:hover { color:var(--blue); }
+    .nav-capsule a.active {
+      background:var(--gold); color:#fff;
+      padding:5px 18px; border-radius:999px; border:2px solid var(--bluedark);
+    }
+
+    /* ── HERO ── */
+    .gallery-hero {
+      min-height:40vh;
+      padding:60px 60px 50px;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; position:relative; overflow:hidden;
+      background:url('road.jpg') center center/cover no-repeat;
+    }
+    .gallery-hero-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to bottom, rgba(46,134,193,0.6), rgba(26,82,118,0.5));
+      z-index:1;
+    }
+    .gallery-hero-content { position:relative; z-index:2; }
+    .gallery-hero-eyebrow {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--coral); color:#fff;
+      font-size:12px; font-weight:900; letter-spacing:2px; text-transform:uppercase;
+      padding:8px 22px; border-radius:999px;
+      border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+      margin-bottom:18px;
+      animation:popBounce .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .gallery-hero h1 {
+      font-family:'Good Pawoo', cursive;
+      font-size:clamp(36px,5vw,68px); line-height:1.05; color:#fff;
+      margin-bottom:12px;
+      animation:popBounce .6s .08s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .gallery-hero h1 span { color:var(--gold); }
+    .gallery-hero p {
+      color:rgba(255,255,255,0.9); font-size:15px;
+      max-width:460px; margin:0 auto; line-height:1.7; font-weight:700;
+      animation:popBounce .6s .16s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    /* ── CONTROLS ── */
+    .gallery-controls {
+      padding:36px 60px 24px;
+      background:#FFFBF4;
+      border-bottom:3px dashed var(--gold);
+    }
+
+    .search-wrap {
+      position:relative; max-width:480px; margin:0 auto 28px;
+    }
+    .search-wrap input {
+      width:100%; padding:13px 20px 13px 48px;
+      border-radius:999px; font-family:'Calli Cat', sans-serif;
+      border:3px solid var(--gold); background:#fff;
+      font-size:14px; font-weight:700; color:var(--ink); outline:none;
+      box-shadow:4px 4px 0 var(--gold);
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .search-wrap input:focus {
+      border-color:var(--blue); box-shadow:4px 4px 0 var(--blue);
+    }
+    .search-wrap input::placeholder { color:#aaa; }
+    .search-wrap .search-icon {
+      position:absolute; left:16px; top:50%; transform:translateY(-50%); pointer-events:none;
+    }
+    .search-icon svg { width:18px; height:18px; stroke:var(--gold); fill:none; }
+
+    /* Category tabs */
+    .cat-tabs { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    .cat-tab {
+      padding:9px 22px; border-radius:999px;
+      border:3px solid var(--ink); background:#fff;
+      font-family:'Fredoka One', cursive;
+      font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:.5px;
+      color:var(--ink); cursor:pointer;
+      box-shadow:3px 3px 0 var(--ink);
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .cat-tab:hover { transform:translateY(-2px); box-shadow:4px 5px 0 var(--ink); border-color:var(--gold); color:var(--gold); }
+    .cat-tab.active { background:var(--gold); color:#fff; border-color:var(--ink); box-shadow:3px 3px 0 var(--ink); }
+
+    /* ── GALLERY CONTENT ── */
+    .gallery-content {
+      padding:48px 60px 80px;
+      background:#FFFBF4;
+      background-image: radial-gradient(circle, rgba(243,156,18,.18) 2px, transparent 2px);
+      background-size:22px 22px;
+    }
+
+    .cat-group { margin-bottom:60px; }
+
+    .cat-group-header {
+      display:flex; align-items:center; gap:16px; margin-bottom:22px;
+    }
+    .cat-group-header h2 {
+      font-family:'Good Pawoo', cursive;
+      font-size:26px; color:var(--ink); white-space:nowrap;
+    }
+    .cat-group-header h2 span { color:var(--gold); }
+    .cat-group-line { flex:1; height:3px; background:var(--gold); border-radius:999px; opacity:0.4; }
+    .cat-count {
+      font-size:11px; color:#fff; white-space:nowrap; font-weight:900;
+      text-transform:uppercase; letter-spacing:1px;
+      background:var(--blue); padding:4px 14px; border-radius:999px;
+      border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);
+      font-family:'Fredoka One',cursive;
+    }
+
+    /* Photo grid */
+    .cat-grid {
+      display:grid;
+      grid-template-columns:repeat(6, 1fr);
+      gap:14px;
+    }
+    @media (max-width:1100px) { .cat-grid { grid-template-columns:repeat(5,1fr); } }
+    @media (max-width:860px) {
+      .cat-grid { grid-template-columns:repeat(4,1fr); }
+      .gallery-content { padding:30px 24px 60px; }
+      .gallery-controls { padding:28px 24px 16px; }
+    }
+    @media (max-width:600px) { .cat-grid { grid-template-columns:repeat(3,1fr); } }
+
+    .gallery-card {
+      border-radius:18px; overflow:hidden; cursor:pointer;
+      position:relative; background:#EBF5FB;
+      aspect-ratio:1;
+      transition:all .22s cubic-bezier(.34,1.56,.64,1);
+      border:3px solid var(--ink);
+      box-shadow:4px 4px 0 var(--ink);
+    }
+    .gallery-card:hover {
+      transform:translateY(-5px) rotate(-1deg);
+      box-shadow:7px 8px 0 var(--ink);
+      border-color:var(--gold);
+    }
+    .gallery-card img {
+      width:100%; height:100%; object-fit:cover;
+      object-position:center; display:block; transition:transform .4s;
+    }
+    .gallery-card:hover img { transform:scale(1.07); }
+    .gallery-card-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(26,82,118,0.75) 0%, transparent 55%);
+      opacity:0; transition:opacity .3s;
+      display:flex; align-items:flex-end; padding:10px;
+    }
+    .gallery-card:hover .gallery-card-overlay { opacity:1; }
+    .gallery-card-label {
+      font-family:'Fredoka One',cursive;
+      font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.5px;
+      color:#fff; background:var(--gold);
+      padding:4px 10px; border-radius:999px;
+      border:1.5px solid var(--ink);
+    }
+
+    /* No results */
+    .no-results { text-align:center; padding:60px 0; color:var(--blue); display:none; }
+    .no-results p { font-size:16px; font-weight:700; margin-top:8px; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position:fixed; inset:0;
+      background:rgba(26,82,118,0.92);
+      z-index:999; display:flex; align-items:center; justify-content:center;
+      opacity:0; visibility:hidden; transition:all .3s;
+    }
+    .lightbox.open { opacity:1; visibility:visible; }
+    .lightbox img {
+      max-width:80vw; max-height:85vh; border-radius:20px;
+      object-fit:contain; box-shadow:0 20px 60px rgba(0,0,0,0.5);
+      border:4px solid var(--gold);
+    }
+    .lightbox-close {
+      position:absolute; top:24px; right:32px; cursor:pointer;
+      background:var(--gold); width:42px; height:42px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; font-weight:900; color:#fff;
+      border:3px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+      font-family:'Calli Cat', sans-serif; line-height:1;
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .lightbox-close:hover { background:var(--coral); transform:scale(1.1) rotate(10deg); }
+
+    .lightbox-nav {
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(255,255,255,0.15);
+      border:3px solid rgba(255,255,255,0.3); cursor:pointer;
+      width:50px; height:50px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+      backdrop-filter:blur(4px);
+    }
+    .lightbox-nav:hover { background:var(--gold); border-color:var(--ink); transform:translateY(-50%) scale(1.1); }
+    .lightbox-nav svg { width:22px; height:22px; stroke:#fff; fill:none; }
+    .lightbox-prev { left:24px; }
+    .lightbox-next { right:80px; }
+
+    .lightbox-counter {
+      position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
+      color:rgba(255,255,255,0.85); font-size:12px; font-weight:900;
+      font-family: 'Fredoka One',cursive; text-transform:uppercase; letter-spacing:1px;
+      background:rgba(26,82,118,0.6); padding:6px 18px; border-radius:999px;
+      border:2px solid rgba(243,156,18,0.5); backdrop-filter:blur(4px);
+    }
+
+    /* INFO PANEL */
+    .lightbox-info {
+      position:absolute; left:32px; top:80%; transform:translateY(-50%);
+      background:rgba(26,82,118,0.85); backdrop-filter:blur(10px);
+      border:3px solid var(--gold); border-radius:20px;
+      padding:20px 18px; min-width:160px; max-width:185px;
+      box-shadow:4px 4px 0 rgba(0,0,0,0.3);
+    }
+    .lightbox-info-title {
+      font-family:'Good Pawoo', cursive;
+      font-size:16px; font-weight:700; color:var(--gold);
+      margin-bottom:12px;
+    }
+    .lightbox-info-bullets { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:7px; }
+    .lightbox-info-bullets li {
+      font-family:'Calli Cat', sans-serif;
+      font-size:12px; font-weight:700; color:rgba(255,255,255,0.9);
+      display:flex; align-items:center; gap:8px;
+    }
+    
+
+    /* ── FOOTER ── */
+    .footer { background:#1A5276; overflow:hidden; }
+    .footer-body {
+      padding:50px 60px 0; display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr; gap:40px;
+      max-width:1200px; margin:0 auto;
+    }
+    .footer-brand .footer-logo { font-family:'Good Pawoo'; font-size:40px; color:var(--gold); line-height:1; margin-bottom:12px; }
+    .footer-brand p { font-size:14px; color:rgba(235,245,251,.75); line-height:1.7; max-width:240px; margin-bottom:20px; font-weight:700; }
+    .footer-socials { display:flex; gap:18px; }
+    .footer-socials a { font-family:'Calli Cat'; font-size:14px; font-weight:700; color:var(--gold); text-decoration:none; }
+    .footer-col h4 { font-family:'Good Pawoo'; font-size:20px; color:var(--gold); margin-bottom:16px; }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-col ul li a { text-decoration:none; font-size:14px; color:rgba(235,245,251,.75); transition:color .2s; font-weight:700; }
+    .footer-col ul li a:hover { color:var(--gold); }
+    .footer-contact-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; }
+    .footer-contact-item span:first-child { font-size:18px; flex-shrink:0; margin-top:2px; }
+    .footer-contact-item span:last-child { font-size:14px; color:rgba(235,245,251,.75); line-height:1.5; font-weight:700; }
+    .footer-bottom {
+      margin-top:36px; border-top:1px solid rgba(243,156,18,.25);
+      padding:18px 60px; display:flex; justify-content:space-between; align-items:center;
+      max-width:1200px; margin-left:auto; margin-right:auto;
+    }
+    .footer-bottom-text { font-size:13px; color:rgba(235,245,251,.45); font-weight:700; }
+
+    @keyframes popBounce {
+      from { opacity:0; transform:scale(.8) translateY(16px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    @media (max-width:960px) {
+      .footer-body { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:600px) {
+      .gallery-controls { padding:28px 20px 16px; }
+      .gallery-content { padding:30px 20px 60px; }
+      .footer-body { grid-template-columns:1fr; padding:40px 28px 0; }
+      .footer-bottom { flex-direction:column; gap:8px; padding:18px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="nav-capsule">
+      <a href="Index.html">Home</a>
+      <a href="service.html">Service</a>
+      <a href="About.html">About</a>
+      <a href="pet-tures.html" class="active">Pet-tures</a>
+      <a href="review.html">Pet-view</a>
+       <a href="shop.html">Shop</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <div class="gallery-hero">
+    <div class="gallery-hero-overlay"></div>
+    <div class="gallery-hero-content">
+      <div class="gallery-hero-eyebrow">Our Gallery</div>
+      <h1>Pet-tures <span>Gallery</span></h1>
+      <p>Browse our adorable pet photos — every fur baby captured with love.</p>
+    </div>
+  </div>
+
+  <!-- ── SEARCH + FILTERS ── -->
+  <div class="gallery-controls">
+    <div class="search-wrap">
+      <span class="search-icon">
+        <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </span>
+      <input type="text" id="searchInput" placeholder="Search by pet name or category..." />
+    </div>
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="filterCat('all', this)">All (71)</button>
+      <button class="cat-tab" onclick="filterCat('dogs', this)"> Dogs (25)</button>
+      <button class="cat-tab" onclick="filterCat('cats', this)"> Cats (25)</button>
+      <button class="cat-tab" onclick="filterCat('rabbits', this)"> Rabbits (12)</button>
+      <button class="cat-tab" onclick="filterCat('hamsters', this)"> Hamsters (9)</button>
+    </div>
+  </div>
+
+  <!-- ── GALLERY ── -->
+  <div class="gallery-content">
+
+    <!-- DOGS -->
+    <div class="cat-group" data-cat="dogs">
+      <div class="cat-group-header">
+        <h2> <span>Dogs</span></h2>
+        <div class="cat-group-line"></div>
+        <span class="cat-count">25 photos</span>
+      </div>
+      <div class="cat-grid" id="grid-dogs">
+        <div class="gallery-card" onclick="openLightbox('dogs/alaskan malamute/1 (1).png', 'dogs', 0)">
+          <img src="dogs/alaskan malamute/1 (1).png" alt="Dog 1" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Alaskan 1</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/alaskan malamute/1 (2).png', 'dogs', 1)">
+          <img src="dogs/alaskan malamute/1 (2).png" alt="Dog 2" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Alaskan 2</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/alaskan malamute/1 (3).png', 'dogs', 2)">
+          <img src="dogs/alaskan malamute/1 (3).png" alt="Dog 3" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Alaskan 3</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/alaskan malamute/1 (4).png', 'dogs', 3)">
+          <img src="dogs/alaskan malamute/1 (4).png" alt="Dog 4" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Alaskan 4</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/alaskan malamute/1.png', 'dogs', 4)">
+          <img src="dogs/alaskan malamute/1.png" alt="Dog 5" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Alaskan 5</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/beagle/1 (30).png', 'dogs', 5)">
+          <img src="dogs/beagle/1 (30).png" alt="Dog 6" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Beagle 6</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/beagle/1 (31).png', 'dogs', 6)">
+          <img src="dogs/beagle/1 (31).png" alt="Dog 7" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Beagle 7</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/beagle/1 (32).png', 'dogs', 7)">
+          <img src="dogs/beagle/1 (32).png" alt="Dog 8" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Beagle 8</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/beagle/1 (33).png', 'dogs', 8)">
+          <img src="dogs/beagle/1 (33).png" alt="Dog 9" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Beagle 9</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/beagle/1 (34).png', 'dogs', 9)">
+          <img src="dogs/beagle/1 (34).png" alt="Dog 10" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Beagle 10</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/bitchon frise/1 (35).png', 'dogs', 10)">
+          <img src="dogs/bitchon frise/1 (35).png" alt="Dog 11" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bichon 11</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/bitchon frise/1 (36).png', 'dogs', 11)">
+          <img src="dogs/bitchon frise/1 (36).png" alt="Dog 12" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bichon 12</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/bitchon frise/1 (37).png', 'dogs', 12)">
+          <img src="dogs/bitchon frise/1 (37).png" alt="Dog 13" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bichon 13</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/bitchon frise/1 (38).png', 'dogs', 13)">
+          <img src="dogs/bitchon frise/1 (38).png" alt="Dog 14" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bichon 14</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/bitchon frise/1 (39).png', 'dogs', 14)">
+          <img src="dogs/bitchon frise/1 (39).png" alt="Dog 15" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bichon 15</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/corgi/1 (40).png', 'dogs', 15)">
+          <img src="dogs/corgi/1 (40).png" alt="Dog 16" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Corgi 16</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/corgi/1 (41).png', 'dogs', 16)">
+          <img src="dogs/corgi/1 (41).png" alt="Dog 17" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Corgi 17</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/corgi/1 (42).png', 'dogs', 17)">
+          <img src="dogs/corgi/1 (42).png" alt="Dog 18" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Corgi 18</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/corgi/1 (43).png', 'dogs', 18)">
+          <img src="dogs/corgi/1 (43).png" alt="Dog 19" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Corgi 19</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/corgi/1 (44).png', 'dogs', 19)">
+          <img src="dogs/corgi/1 (44).png" alt="Dog 20" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Corgi 20</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/terrier/1 (45).png', 'dogs', 20)">
+          <img src="dogs/terrier/1 (45).png" alt="Dog 21" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Terrier 21</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/terrier/1 (46).png', 'dogs', 21)">
+          <img src="dogs/terrier/1 (46).png" alt="Dog 22" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Terrier 22</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/terrier/1 (47).png', 'dogs', 22)">
+          <img src="dogs/terrier/1 (47).png" alt="Dog 23" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Terrier 23</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/terrier/1 (48).png', 'dogs', 23)">
+          <img src="dogs/terrier/1 (48).png" alt="Dog 24" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Terrier 24</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('dogs/terrier/1 (49).png', 'dogs', 24)">
+          <img src="dogs/terrier/1 (49).png" alt="Dog 25" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Terrier 25</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATS -->
+    <div class="cat-group" data-cat="cats">
+      <div class="cat-group-header">
+        <h2> <span>Cats</span></h2>
+        <div class="cat-group-line"></div>
+        <span class="cat-count">25 photos</span>
+      </div>
+      <div class="cat-grid" id="grid-cats">
+        <div class="gallery-card" onclick="openLightbox('cats/bombay/1.png', 'cats', 0)">
+          <img src="cats/bombay/1.png" alt="Cat 1" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bombay 1</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/bombay/2.png', 'cats', 1)">
+          <img src="cats/bombay/2.png" alt="Cat 2" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bombay 2</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/bombay/3.png', 'cats', 2)">
+          <img src="cats/bombay/3.png" alt="Cat 3" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bombay 3</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/bombay/4.png', 'cats', 3)">
+          <img src="cats/bombay/4.png" alt="Cat 4" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bombay 4</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/bombay/5.png', 'cats', 4)">
+          <img src="cats/bombay/5.png" alt="Cat 5" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Bombay 5</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/persian/1.png', 'cats', 5)">
+          <img src="cats/persian/1.png" alt="Cat 6" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Persian 6</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/persian/2.png', 'cats', 6)">
+          <img src="cats/persian/2.png" alt="Cat 7" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Persian 7</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/persian/3.png', 'cats', 7)">
+          <img src="cats/persian/3.png" alt="Cat 8" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Persian 8</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/persian/4.png', 'cats', 8)">
+          <img src="cats/persian/4.png" alt="Cat 9" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Persian 9</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/persian/5.png', 'cats', 9)">
+          <img src="cats/persian/5.png" alt="Cat 10" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Persian 10</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/ragdoll/1 (1).png', 'cats', 10)">
+          <img src="cats/ragdoll/1 (1).png" alt="Cat 11" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Ragdoll 11</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/ragdoll/1 (2).png', 'cats', 11)">
+          <img src="cats/ragdoll/1 (2).png" alt="Cat 12" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Ragdoll 12</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/ragdoll/1 (3).png', 'cats', 12)">
+          <img src="cats/ragdoll/1 (3).png" alt="Cat 13" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Ragdoll 13</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/ragdoll/1 (4).png', 'cats', 13)">
+          <img src="cats/ragdoll/1 (4).png" alt="Cat 14" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Ragdoll 14</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/ragdoll/1.png', 'cats', 14)">
+          <img src="cats/ragdoll/1.png" alt="Cat 15" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Ragdoll 15</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/siamese/1 (1).png', 'cats', 15)">
+          <img src="cats/siamese/1 (1).png" alt="Cat 16" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Siamese 16</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/siamese/1 (2).png', 'cats', 16)">
+          <img src="cats/siamese/1 (2).png" alt="Cat 17" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Siamese 17</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/siamese/1 (3).png', 'cats', 17)">
+          <img src="cats/siamese/1 (3).png" alt="Cat 18" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Siamese 18</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/siamese/1 (4).png', 'cats', 18)">
+          <img src="cats/siamese/1 (4).png" alt="Cat 19" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Siamese 19</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/siamese/1.png', 'cats', 19)">
+          <img src="cats/siamese/1.png" alt="Cat 20" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Siamese 20</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/sphynx/1 (5).png', 'cats', 20)">
+          <img src="cats/sphynx/1 (5).png" alt="Cat 21" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Sphynx 21</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/sphynx/1 (6).png', 'cats', 21)">
+          <img src="cats/sphynx/1 (6).png" alt="Cat 22" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Sphynx 22</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/sphynx/1 (7).png', 'cats', 22)">
+          <img src="cats/sphynx/1 (7).png" alt="Cat 23" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Sphynx 23</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/sphynx/1 (8).png', 'cats', 23)">
+          <img src="cats/sphynx/1 (8).png" alt="Cat 24" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Sphynx 24</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('cats/sphynx/1 (9).png', 'cats', 24)">
+          <img src="cats/sphynx/1 (9).png" alt="Cat 25" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Sphynx 25</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RABBITS -->
+    <div class="cat-group" data-cat="rabbits">
+      <div class="cat-group-header">
+        <h2><span>Rabbits</span></h2>
+        <div class="cat-group-line"></div>
+        <span class="cat-count">12 photos</span>
+      </div>
+      <div class="cat-grid" id="grid-rabbits">
+        <div class="gallery-card" onclick="openLightbox('rabbits/english lop/1 (9).png', 'rabbits', 0)">
+          <img src="rabbits/english lop/1 (9).png" alt="Rabbit 1" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">English Lop 1</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/english lop/1 (10).png', 'rabbits', 1)">
+          <img src="rabbits/english lop/1 (10).png" alt="Rabbit 2" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">English Lop 2</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/english lop/1 (11).png', 'rabbits', 2)">
+          <img src="rabbits/english lop/1 (11).png" alt="Rabbit 3" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">English Lop 3</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/holland lop/1 (12).png', 'rabbits', 3)">
+          <img src="rabbits/holland lop/1 (12).png" alt="Rabbit 4" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Holland 4</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/holland lop/1 (14).png', 'rabbits', 4)">
+          <img src="rabbits/holland lop/1 (14).png" alt="Rabbit 5" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Holland 5</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/holland lop/1 (15).png', 'rabbits', 5)">
+          <img src="rabbits/holland lop/1 (15).png" alt="Rabbit 6" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Holland 6</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/lion head/1 (16).png', 'rabbits', 6)">
+          <img src="rabbits/lion head/1 (16).png" alt="Rabbit 7" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Lion Head 7</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/lion head/1 (17).png', 'rabbits', 7)">
+          <img src="rabbits/lion head/1 (17).png" alt="Rabbit 8" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Lion Head 8</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/lion head/1 (18).png', 'rabbits', 8)">
+          <img src="rabbits/lion head/1 (18).png" alt="Rabbit 9" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Lion Head 9</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/mini lop/1 (52).png', 'rabbits', 9)">
+          <img src="rabbits/mini lop/1 (52).png" alt="Rabbit 10" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Mini Lop 10</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/mini lop/1 (53).png', 'rabbits', 10)">
+          <img src="rabbits/mini lop/1 (53).png" alt="Rabbit 11" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Mini Lop 11</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('rabbits/mini lop/1 (54).png', 'rabbits', 11)">
+          <img src="rabbits/mini lop/1 (54).png" alt="Rabbit 12" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Mini Lop 12</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HAMSTERS -->
+    <div class="cat-group" data-cat="hamsters">
+      <div class="cat-group-header">
+        <h2> <span>Hamsters</span></h2>
+        <div class="cat-group-line"></div>
+        <span class="cat-count">9 photos</span>
+      </div>
+      <div class="cat-grid" id="grid-hamsters">
+        <div class="gallery-card" onclick="openLightbox('hamster/campbell_s dwarf hamster/1 (55).png', 'hamsters', 0)">
+          <img src="hamster/campbell_s dwarf hamster/1 (55).png" alt="Hamster 1" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Campbell 1</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/campbell_s dwarf hamster/1 (56).png', 'hamsters', 1)">
+          <img src="hamster/campbell_s dwarf hamster/1 (56).png" alt="Hamster 2" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Campbell 2</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/campbell_s dwarf hamster/1 (57).png', 'hamsters', 2)">
+          <img src="hamster/campbell_s dwarf hamster/1 (57).png" alt="Hamster 3" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Campbell 3</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/roborovski dwarf hamster/1 (58).png', 'hamsters', 3)">
+          <img src="hamster/roborovski dwarf hamster/1 (58).png" alt="Hamster 4" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Roborovski 4</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/roborovski dwarf hamster/1 (59).png', 'hamsters', 4)">
+          <img src="hamster/roborovski dwarf hamster/1 (59).png" alt="Hamster 5" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Roborovski 5</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/roborovski dwarf hamster/1 (60).png', 'hamsters', 5)">
+          <img src="hamster/roborovski dwarf hamster/1 (60).png" alt="Hamster 6" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Roborovski 6</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/syrian hamster/1 (61).png', 'hamsters', 6)">
+          <img src="hamster/syrian hamster/1 (61).png" alt="Hamster 7" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Syrian 7</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/syrian hamster/1 (62).png', 'hamsters', 7)">
+          <img src="hamster/syrian hamster/1 (62).png" alt="Hamster 8" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Syrian 8</span></div>
+        </div>
+        <div class="gallery-card" onclick="openLightbox('hamster/syrian hamster/1 (63).png', 'hamsters', 8)">
+          <img src="hamster/syrian hamster/1 (63).png" alt="Hamster 9" loading="lazy"/>
+          <div class="gallery-card-overlay"><span class="gallery-card-label">Syrian 9</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NO RESULTS -->
+    <div class="no-results" id="noResults">
+      <p> No results found. Try a different search!</p>
+    </div>
+
+  </div>
+
+  <!-- ── LIGHTBOX ── -->
+  <div class="lightbox" id="lightbox" onclick="handleLightboxClick(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <div class="lightbox-info" id="lightboxInfo">
+      <div class="lightbox-info-title" id="lightboxInfoTitle">Pet Info</div>
+      <ul class="lightbox-info-bullets" id="lightboxInfoBullets">
+        <li>Loading...</li>
+      </ul>
+    </div>
+    <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1); event.stopPropagation();">
+      <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+    <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()"/>
+    <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1); event.stopPropagation();">
+      <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+    <div class="lightbox-counter" id="lightboxCounter"></div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-body">
+      <div class="footer-brand">
+        <div class="footer-logo">ฅ^•ﻌ•^ฅ</div>
+        <div class="footer-logo">PurrCare co.</div>
+        <p>Where every pet is treated like family — with love, care, and a whole lot of paw-sion.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/won_jww" target="_blank" rel="noopener">◙</a>
+          <a href="https://www.twitter.com/aea29858" target="_blank" rel="noopener">✕</a>
+          <a href="https://mail.google.com/mail/?view=cm&to=aea29858@gmail.com" target="_blank">✉</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="Index.html">Home</a></li>
+          <li><a href="service.html">Service</a></li>
+          <li><a href="About.html">About</a></li>
+          <li><a href="pet-tures.html">Pet-tures</a></li>
+          <li><a href="review.html">Pet-view</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Grooming</a></li>
+          <li><a href="#">Boarding</a></li>
+          <li><a href="#">Feeding</a></li>
+          <li><a href="#">Health Check</a></li>
+          <li><a href="#">Playtime</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <div class="footer-contact-item"><span>⟟</span><span>Pasig City, Metro Manila, Philippines</span></div>
+        <div class="footer-contact-item"><span>✉</span><span>helloPurrCareco.ph</span></div>
+        <div class="footer-contact-item"><span>⏲</span><span>Mon to Sun: Open all day!</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-text">© PurrCare co. — Made with love for pets everywhere</div>
+    </div>
+  </div>
+
+<script>
+  var petInfo = {
+    dogs: [
+      { name: 'Alaskan Malamute', traits: ['Goofy', 'Playful', 'Stubborn'] },
+      { name: 'Alaskan Malamute', traits: ['Loyal', 'Energetic', 'Fluffy'] },
+      { name: 'Alaskan Malamute', traits: ['Adventurous', 'Strong', 'Friendly'] },
+      { name: 'Alaskan Malamute', traits: ['Silly', 'Affectionate', 'Bold'] },
+      { name: 'Alaskan Malamute', traits: ['Curious', 'Stubborn', 'Gentle'] },
+      { name: 'Beagle', traits: ['Nosy', 'Cheerful', 'Energetic'] },
+      { name: 'Beagle', traits: ['Curious', 'Friendly', 'Loud'] },
+      { name: 'Beagle', traits: ['Playful', 'Stubborn', 'Sweet'] },
+      { name: 'Beagle', traits: ['Sniffly', 'Happy', 'Sociable'] },
+      { name: 'Beagle', traits: ['Mischievous', 'Loyal', 'Energetic'] },
+      { name: 'Bichon Frise', traits: ['Fluffy', 'Cheerful', 'Gentle'] },
+      { name: 'Bichon Frise', traits: ['Playful', 'Sweet', 'Affectionate'] },
+      { name: 'Bichon Frise', traits: ['Silly', 'Cuddly', 'Friendly'] },
+      { name: 'Bichon Frise', traits: ['Lively', 'Soft', 'Happy'] },
+      { name: 'Bichon Frise', traits: ['Charming', 'Gentle', 'Sociable'] },
+      { name: 'Corgi', traits: ['Sassy', 'Smart', 'Fluffy'] },
+      { name: 'Corgi', traits: ['Loyal', 'Bossy', 'Energetic'] },
+      { name: 'Corgi', traits: ['Playful', 'Clever', 'Stubborn'] },
+      { name: 'Corgi', traits: ['Goofy', 'Alert', 'Friendly'] },
+      { name: 'Corgi', traits: ['Cheeky', 'Brave', 'Cuddly'] },
+      { name: 'Terrier', traits: ['Feisty', 'Bold', 'Energetic'] },
+      { name: 'Terrier', traits: ['Scrappy', 'Curious', 'Brave'] },
+      { name: 'Terrier', traits: ['Spirited', 'Alert', 'Playful'] },
+      { name: 'Terrier', traits: ['Stubborn', 'Lively', 'Loyal'] },
+      { name: 'Terrier', traits: ['Cheeky', 'Fierce', 'Friendly'] },
+    ],
+    cats: [
+      { name: 'Bombay', traits: ['Sleek', 'Curious', 'Playful'] },
+      { name: 'Bombay', traits: ['Bold', 'Affectionate', 'Sassy'] },
+      { name: 'Bombay', traits: ['Energetic', 'Loyal', 'Clever'] },
+      { name: 'Bombay', traits: ['Mischievous', 'Social', 'Loving'] },
+      { name: 'Bombay', traits: ['Sneaky', 'Friendly', 'Confident'] },
+      { name: 'Persian', traits: ['Calm', 'Fluffy', 'Sweet'] },
+      { name: 'Persian', traits: ['Lazy', 'Gentle', 'Elegant'] },
+      { name: 'Persian', traits: ['Quiet', 'Soft', 'Lovable'] },
+      { name: 'Persian', traits: ['Royal', 'Calm', 'Cuddly'] },
+      { name: 'Persian', traits: ['Shy', 'Gentle', 'Serene'] },
+      { name: 'Ragdoll', traits: ['Docile', 'Cuddly', 'Relaxed'] },
+      { name: 'Ragdoll', traits: ['Floppy', 'Sweet', 'Gentle'] },
+      { name: 'Ragdoll', traits: ['Calm', 'Loving', 'Soft'] },
+      { name: 'Ragdoll', traits: ['Lazy', 'Friendly', 'Fluffy'] },
+      { name: 'Ragdoll', traits: ['Clingy', 'Peaceful', 'Adorable'] },
+      { name: 'Siamese', traits: ['Vocal', 'Clingy', 'Social'] },
+      { name: 'Siamese', traits: ['Chatty', 'Curious', 'Loyal'] },
+      { name: 'Siamese', traits: ['Dramatic', 'Loving', 'Energetic'] },
+      { name: 'Siamese', traits: ['Needy', 'Smart', 'Playful'] },
+      { name: 'Siamese', traits: ['Noisy', 'Affectionate', 'Bold'] },
+      { name: 'Sphynx', traits: ['Mischievous', 'Warm', 'Loving'] },
+      { name: 'Sphynx', traits: ['Energetic', 'Nosy', 'Cuddly'] },
+      { name: 'Sphynx', traits: ['Cheeky', 'Social', 'Playful'] },
+      { name: 'Sphynx', traits: ['Clingy', 'Silly', 'Affectionate'] },
+      { name: 'Sphynx', traits: ['Bold', 'Curious', 'Friendly'] },
+    ],
+    rabbits: [
+      { name: 'English Lop', traits: ['Calm', 'Floppy', 'Sweet'] },
+      { name: 'English Lop', traits: ['Docile', 'Gentle', 'Lazy'] },
+      { name: 'English Lop', traits: ['Friendly', 'Soft', 'Relaxed'] },
+      { name: 'Holland Lop', traits: ['Playful', 'Curious', 'Tiny'] },
+      { name: 'Holland Lop', traits: ['Gentle', 'Sweet', 'Energetic'] },
+      { name: 'Holland Lop', traits: ['Cuddly', 'Shy', 'Friendly'] },
+      { name: 'Lion Head', traits: ['Bold', 'Fluffy', 'Energetic'] },
+      { name: 'Lion Head', traits: ['Sociable', 'Feisty', 'Curious'] },
+      { name: 'Lion Head', traits: ['Playful', 'Brave', 'Lively'] },
+      { name: 'Mini Lop', traits: ['Sweet', 'Easygoing', 'Cuddly'] },
+      { name: 'Mini Lop', traits: ['Gentle', 'Playful', 'Relaxed'] },
+      { name: 'Mini Lop', traits: ['Affectionate', 'Calm', 'Friendly'] },
+    ],
+    hamsters: [
+      { name: 'Campbell Dwarf', traits: ['Speedy', 'Curious', 'Social'] },
+      { name: 'Campbell Dwarf', traits: ['Active', 'Cheeky', 'Friendly'] },
+      { name: 'Campbell Dwarf', traits: ['Energetic', 'Bold', 'Playful'] },
+      { name: 'Roborovski', traits: ['Tiny', 'Speedy', 'Shy'] },
+      { name: 'Roborovski', traits: ['Skittish', 'Cute', 'Energetic'] },
+      { name: 'Roborovski', traits: ['Zippy', 'Curious', 'Playful'] },
+      { name: 'Syrian', traits: ['Solitary', 'Tame', 'Gentle'] },
+      { name: 'Syrian', traits: ['Calm', 'Friendly', 'Fluffy'] },
+      { name: 'Syrian', traits: ['Cuddly', 'Lazy', 'Sweet'] },
+    ]
+  };
+
+  var allCategories = ['dogs', 'cats', 'rabbits', 'hamsters'];
+
+  var galleryData = {
+    dogs: [
+      'dogs/alaskan malamute/1 (1).png','dogs/alaskan malamute/1 (2).png','dogs/alaskan malamute/1 (3).png',
+      'dogs/alaskan malamute/1 (4).png','dogs/alaskan malamute/1.png',
+      'dogs/beagle/1 (30).png','dogs/beagle/1 (31).png','dogs/beagle/1 (32).png','dogs/beagle/1 (33).png','dogs/beagle/1 (34).png',
+      'dogs/bitchon frise/1 (35).png','dogs/bitchon frise/1 (36).png','dogs/bitchon frise/1 (37).png','dogs/bitchon frise/1 (38).png','dogs/bitchon frise/1 (39).png',
+      'dogs/corgi/1 (40).png','dogs/corgi/1 (41).png','dogs/corgi/1 (42).png','dogs/corgi/1 (43).png','dogs/corgi/1 (44).png',
+      'dogs/terrier/1 (45).png','dogs/terrier/1 (46).png','dogs/terrier/1 (47).png','dogs/terrier/1 (48).png','dogs/terrier/1 (49).png'
+    ],
+    cats: [
+      'cats/bombay/1.png','cats/bombay/2.png','cats/bombay/3.png','cats/bombay/4.png','cats/bombay/5.png',
+      'cats/persian/1.png','cats/persian/2.png','cats/persian/3.png','cats/persian/4.png','cats/persian/5.png',
+      'cats/ragdoll/1 (1).png','cats/ragdoll/1 (2).png','cats/ragdoll/1 (3).png','cats/ragdoll/1 (4).png','cats/ragdoll/1.png',
+      'cats/siamese/1 (1).png','cats/siamese/1 (2).png','cats/siamese/1 (3).png','cats/siamese/1 (4).png','cats/siamese/1.png',
+      'cats/sphynx/1 (5).png','cats/sphynx/1 (6).png','cats/sphynx/1 (7).png','cats/sphynx/1 (8).png','cats/sphynx/1 (9).png'
+    ],
+    rabbits: [
+      'rabbits/english lop/1 (9).png','rabbits/english lop/1 (10).png','rabbits/english lop/1 (11).png',
+      'rabbits/holland lop/1 (12).png','rabbits/holland lop/1 (14).png','rabbits/holland lop/1 (15).png',
+      'rabbits/lion head/1 (16).png','rabbits/lion head/1 (17).png','rabbits/lion head/1 (18).png',
+      'rabbits/mini lop/1 (52).png','rabbits/mini lop/1 (53).png','rabbits/mini lop/1 (54).png'
+    ],
+    hamsters: [
+      'hamster/campbell_s dwarf hamster/1 (55).png','hamster/campbell_s dwarf hamster/1 (56).png','hamster/campbell_s dwarf hamster/1 (57).png',
+      'hamster/roborovski dwarf hamster/1 (58).png','hamster/roborovski dwarf hamster/1 (59).png','hamster/roborovski dwarf hamster/1 (60).png',
+      'hamster/syrian hamster/1 (61).png','hamster/syrian hamster/1 (62).png','hamster/syrian hamster/1 (63).png'
+    ]
+  };
+
+  var currentCat = '';
+  var currentIndex = 0;
+
+  function filterCat(cat, btn) {
+    document.querySelectorAll('.cat-tab').forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('searchInput').value = '';
+    document.querySelectorAll('.cat-group').forEach(function(g) {
+      g.style.display = (cat === 'all' || g.dataset.cat === cat) ? 'block' : 'none';
+    });
+    document.querySelectorAll('.gallery-card').forEach(function(c) { c.style.display = 'block'; });
+    document.getElementById('noResults').style.display = 'none';
+  }
+
+  document.getElementById('searchInput').addEventListener('input', function () {
+    var q = this.value.toLowerCase().trim();
+    document.querySelectorAll('.cat-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelector('.cat-tab').classList.add('active');
+    var anyVisible = false;
+    document.querySelectorAll('.cat-group').forEach(function(group) {
+      var catName = group.dataset.cat.toLowerCase();
+      var cards = group.querySelectorAll('.gallery-card');
+      var groupVisible = false;
+      cards.forEach(function(card) {
+        var alt = card.querySelector('img').alt.toLowerCase();
+        var label = card.querySelector('.gallery-card-label').textContent.toLowerCase();
+        var match = !q || alt.includes(q) || label.includes(q) || catName.includes(q);
+        card.style.display = match ? 'block' : 'none';
+        if (match) groupVisible = true;
+      });
+      group.style.display = groupVisible ? 'block' : 'none';
+      if (groupVisible) anyVisible = true;
+    });
+    document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+  });
+
+  function updateInfoPanel() {
+    var info = petInfo[currentCat] && petInfo[currentCat][currentIndex];
+    if (!info) return;
+    document.getElementById('lightboxInfoTitle').textContent = info.name;
+    var ul = document.getElementById('lightboxInfoBullets');
+    ul.innerHTML = '';
+    info.traits.forEach(function(t) {
+      var li = document.createElement('li');
+      li.textContent = t;
+      ul.appendChild(li);
+    });
+  }
+
+  function updateCounter() {
+    var beforeCount = 0;
+    for (var i = 0; i < allCategories.indexOf(currentCat); i++) {
+      beforeCount += galleryData[allCategories[i]].length;
+    }
+    var total = allCategories.reduce(function(sum, c) { return sum + galleryData[c].length; }, 0);
+    document.getElementById('lightboxCounter').textContent =
+      (beforeCount + currentIndex + 1) + ' / ' + total + '  (' + currentCat + ')';
+  }
+
+  function openLightbox(src, cat, index) {
+    currentCat = cat;
+    currentIndex = index;
+    document.getElementById('lightboxImg').src = src;
+    updateCounter();
+    updateInfoPanel();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function navigateLightbox(dir) {
+    var list = galleryData[currentCat];
+    var newIndex = currentIndex + dir;
+    if (newIndex >= list.length) {
+      var catIdx = allCategories.indexOf(currentCat);
+      currentCat = catIdx < allCategories.length - 1 ? allCategories[catIdx + 1] : allCategories[0];
+      currentIndex = 0;
+    } else if (newIndex < 0) {
+      var catIdx = allCategories.indexOf(currentCat);
+      currentCat = catIdx > 0 ? allCategories[catIdx - 1] : allCategories[allCategories.length - 1];
+      currentIndex = galleryData[currentCat].length - 1;
+    } else {
+      currentIndex = newIndex;
+    }
+    document.getElementById('lightboxImg').src = galleryData[currentCat][currentIndex];
+    updateCounter();
+    updateInfoPanel();
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleLightboxClick(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+  });
+</script>
+
+</body>
+</html>

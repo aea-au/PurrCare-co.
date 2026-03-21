@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PurrCare co. — Pet-view</title>
+  <style>
+    @font-face { font-family:'Good Pawoo'; src:url('Good Pawoo - Display.ttf'); }
+    @font-face { font-family:'Calli Cat';  src:url('Calli Cat.ttf'); }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --blue:    #2E86C1;
+      --bluedark:#1A5276;
+      --gold:    #F39C12;
+      --coral:   #FF6B6B;
+      --mint:    #2ECC71;
+      --purple:  #9B59B6;
+      --sky:     #56CCF2;
+      --yellow:  #FFE066;
+      --peach:   #FFD6BA;
+      --white:   #FFFFFF;
+      --ink:     #1c3d56;
+      --skyblue: #B1CDDA;
+    }
+
+    html { scroll-behavior:smooth; }
+
+
+body {
+  font-family: 'Calli Cat';
+  background: var(--skyblue);
+  color: var(--ink);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  background-image: radial-gradient(circle, rgb(226, 155, 49) 1.5px, transparent 1.5px);
+  background-size: 26px 26px;
+  /* ← NO position, inset, z-index, pointer-events here */
+}
+
+
+
+    /* ══ NAVBAR ══ */
+    .navbar {
+      display:flex; align-items:center; justify-content:center;
+      padding:10px 40px;
+      background:url('head.jpg') center/cover no-repeat;
+      min-height:120px; position:relative;
+    }
+    .nav-capsule {
+      background:rgba(255,255,255,0.96); border-radius:999px; padding:12px 40px;
+      display:flex; gap:32px; align-items:center;
+      border:3px solid var(--gold); box-shadow:5px 5px 0 var(--gold);
+      position:relative; z-index:2;
+    }
+    .nav-capsule a {
+      text-decoration:none; font-size:13px; color:var(--gold);
+      font-weight:900; text-transform:uppercase; letter-spacing:.5px; transition:color .2s;
+    }
+    .nav-capsule a:hover { color:var(--blue); }
+    .nav-capsule a.active {
+      background:var(--blue); color:#fff;
+      padding:5px 18px; border-radius:999px; border:2px solid var(--bluedark);
+    }
+
+    /* ══ HERO ══ */
+     .hero {
+  min-height:36vh; padding:60px 60px 50px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; position:relative; overflow:hidden;
+  background:url('likod3.jpg') center/cover no-repeat;
+  border-bottom:3px dashed var(--gold);
+}
+/* yellow tint overlay */
+.hero::before {
+  content:''; position:absolute; inset:0; z-index:1;
+  background:rgba(255,230,80,.58);
+}
+ 
+    .hero::after {
+      content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+      background-image:radial-gradient(circle, rgba(26,82,118,.1) 1.5px, transparent 1.5px);
+      background-size:26px 26px;
+    }
+    .hero-bubble {
+      position:relative; z-index:2;
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--coral); color:#fff;
+      font-size:12px; font-weight:900; letter-spacing:2px; text-transform:uppercase;
+      padding:8px 22px; border-radius:999px;
+      border:3px solid var(--ink); box-shadow:4px 4px 0 var(--ink);
+      margin-bottom:16px;
+      animation:popBounce .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .hero h1 {
+      position:relative; z-index:2;
+      font-family:'Good Pawoo','Fredoka One',cursive;
+      font-size:clamp(36px,5vw,64px); color:var(--ink); margin-bottom:12px;
+      animation:popBounce .6s .08s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .hero h1 span { color:var(--coral); }
+    .hero p {
+      position:relative; z-index:2;
+      font-size:15px; color:#555; font-weight:700;
+      max-width:460px; margin:0 auto; line-height:1.7;
+      animation:popBounce .6s .15s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    /* ══ RATING SUMMARY STRIP ══ */
+    .rating-strip {
+      background:var(--bluedark);
+      padding:28px 60px;
+      display:flex; gap:24px; justify-content:center; align-items:stretch; flex-wrap:wrap;
+    }
+
+    /* big score card */
+    .score-card {
+      background:var(--yellow); border-radius:24px;
+      border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink);
+      padding:22px 32px; text-align:center; min-width:150px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+    }
+    .score-num {
+      font-family:'Fredoka One',cursive;
+      font-size:58px; color:var(--ink); line-height:1;
+    }
+    .score-stars { font-size:22px; color:var(--gold); margin:4px 0; }
+    .score-total {  font-family:'Fredoka One',cursive; font-size:12px; font-weight:900; color:var(--ink); text-transform:uppercase; letter-spacing:1px; }
+
+    /* bars card */
+    .bars-card {
+      background:#fff; border-radius:24px;
+      border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink);
+      padding:22px 28px; flex:1; max-width:380px;
+      font-family:'Fredoka One',cursive;
+    }
+    .bars-card-title {
+      font-family:'Fredoka One',cursive;
+      font-size:18px; color:var(--ink); margin-bottom:14px;
+    }
+    .rating-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .rating-label { font-size:11px; font-weight:900; color:var(--ink); width:36px; text-transform:uppercase; }
+    .rating-star { font-size:14px; color:var(--gold); }
+    .bar-track { flex:1; height:10px; background:#f0f0f0; border-radius:999px; overflow:hidden; border:1.5px solid var(--ink); }
+    .bar-fill { height:100%; background:var(--gold); border-radius:999px; }
+    .bar-count { font-size:11px; color:var(--ink); font-weight:900; width:36px; text-align:right; }
+
+    /* highlight chips */
+    .highlights-card {
+      background:var(--sky); border-radius:24px;
+      border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink);
+      padding:22px 24px; min-width:180px;
+      display:flex; flex-direction:column; gap:10px; justify-content:center;
+    }
+    .highlight-chip {
+      background:#fff; border:2.5px solid var(--ink);
+      border-radius:14px; padding:10px 14px;
+      display:flex; align-items:center; gap:10px;
+      box-shadow:3px 3px 0 var(--ink);
+    }
+    .highlight-chip .hc-text { font-size:12px; font-weight:900; color:var(--ink); line-height:1.3; }
+    .highlight-chip .hc-num { font-family:'Fredoka One',cursive; font-size:20px; color:var(--gold); margin-left:auto; }
+
+    /* ══ MAIN CONTENT ══ */
+    .main-wrap {
+      padding:48px 52px 80px;
+      display:grid; grid-template-columns:1fr 400px; gap:32px;
+      max-width:1200px; margin:0 auto;
+    }
+
+    /* filter bar */
+    .filter-bar {
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; align-items:center;
+    }
+    .filter-label { font-size:12px; font-weight:900; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-right:4px; }
+    .filter-btn {
+      padding:7px 18px; border-radius:999px;
+      border:2.5px solid var(--ink); background:#fff;
+      font-family:'Nunito',sans-serif; font-size:12px; font-weight:900;
+      color:var(--ink); cursor:pointer;
+      box-shadow:3px 3px 0 var(--ink);
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .filter-btn:hover { transform:translateY(-2px); box-shadow:4px 4px 0 var(--ink); }
+    .filter-btn.active { background:var(--blue); color:#fff; border-color:var(--ink); }
+    .filter-btn[data-filter="cat"].active    { background:var(--sky); color:var(--ink); }
+    .filter-btn[data-filter="dog"].active    { background:var(--gold); color:#fff; }
+    .filter-btn[data-filter="rabbit"].active { background:var(--mint); color:#fff; }
+    .filter-btn[data-filter="hamster"].active{ background:var(--coral); color:#fff; }
+
+    /* section title */
+    .col-title {
+      font-family:'Good Pawoo','Fredoka One',cursive;
+      font-size:26px; color:var(--ink); margin-bottom:16px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .col-title span { color:var(--gold); }
+
+    /* review cards */
+    .feedback-card {
+      background:#fff; border-radius:24px;
+      border:3px solid var(--ink); padding:18px 20px;
+      margin-bottom:16px; display:flex; gap:14px; align-items:flex-start;
+      box-shadow:4px 4px 0 var(--ink);
+      transition:all .22s cubic-bezier(.34,1.56,.64,1);
+      font-family:'Fredoka One',cursive;
+    }
+    .feedback-card:hover { transform:translateY(-5px); box-shadow:6px 8px 0 var(--ink); }
+    .feedback-card.hidden { display:none; }
+
+    .feedback-pet-img {
+      width:80px; height:80px; border-radius:16px;
+      object-fit:cover; flex-shrink:0;
+      border:3px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+    }
+    .feedback-body { flex:1; }
+    .feedback-pet-tag {
+      display:inline-block; font-size:10px; font-weight:900;
+      text-transform:uppercase; letter-spacing:.5px;
+      padding:3px 10px; border-radius:999px; margin-bottom:5px;
+      border:2px solid var(--ink);
+    }
+    .tag-cat     { background:var(--sky);    color:var(--ink); }
+    .tag-dog     { background:var(--yellow); color:var(--ink); }
+    .tag-rabbit  { background:var(--mint);   color:#fff; }
+    .tag-hamster { background:var(--coral);  color:#fff; }
+
+    .feedback-name { font-size:14px; font-weight:900; color:var(--ink); margin-bottom:3px; }
+    .feedback-stars { font-size:14px; color:var(--gold); margin-bottom:5px; }
+    .feedback-text { font-size:12.5px; color:#666; line-height:1.65; font-weight:700; }
+
+    /* helpful button */
+    .feedback-footer {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-top:10px;
+    }
+    .feedback-date { font-size:10px; color:#aaa; font-weight:700; }
+    .helpful-btn {
+      display:inline-flex; align-items:center; gap:5px;
+      background:var(--yellow); border:2px solid var(--ink);
+      border-radius:999px; padding:4px 12px;
+      font-size:11px; font-weight:900; color:var(--ink);
+      cursor:pointer; box-shadow:2px 2px 0 var(--ink);
+      transition:all .2s;
+    }
+    .helpful-btn:hover { background:var(--gold); color:#fff; transform:translateY(-1px); }
+    .helpful-btn.liked { background:var(--gold); color:#fff; }
+
+
+    .form-card {
+      background:#fff; border-radius:28px;
+      border:3px solid var(--ink); padding:30px 28px;
+      box-shadow:6px 6px 0 var(--ink);
+      position:sticky; top:20px;
+    }
+    .form-card-title {
+      font-family:'Good Pawoo','Fredoka One',cursive;
+      font-size:24px; color:var(--ink); margin-bottom:4px;
+    }
+    .form-card-title span { color:var(--coral); }
+    .form-card-sub { font-size:12px; color:#aaa; font-weight:700; margin-bottom:22px; }
+
+    .form-label {
+      font-size:11px; font-weight:900; color:var(--ink);
+      margin-bottom:6px; display:block;
+      text-transform:uppercase; letter-spacing:.5px;
+    }
+
+    /* star rating */
+    .star-select { display:flex; gap:6px; margin-bottom:18px; }
+    .star-select span {
+      font-size:28px; cursor:pointer; color:#e0e0e0;
+      transition:all .15s cubic-bezier(.34,1.56,.64,1);
+    }
+    .star-select span.active,
+    .star-select span:hover { color:var(--gold); transform:scale(1.2); }
+
+    /* pet chips */
+    .form-pet-select { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+    .pet-chip {
+      padding:7px 16px; border-radius:999px;
+      font-size:12px; font-weight:900; cursor:pointer;
+      border:2.5px solid var(--ink); background:#fff; color:var(--ink);
+      box-shadow:3px 3px 0 var(--ink);
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .pet-chip:hover { transform:translateY(-2px); }
+    .pet-chip.active { background:var(--blue); color:#fff; border-color:var(--ink); transform:translateY(-2px); }
+
+    .form-input, .form-textarea {
+      width:100%; padding:10px 14px;
+      border:2.5px solid #e0e0e0; border-radius:14px;
+      font-size:13px; font-family:'Fredoka One',cursive;
+      color:var(--ink); background:#FFFBF4;
+      margin-bottom:14px; outline:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color:var(--gold); background:#fff;
+      box-shadow:3px 3px 0 var(--gold);
+      font-family:'Fredoka One',cursive;
+    }
+    .form-textarea {  resize:vertical; min-height:100px; }
+
+    .btn-submit {
+      width:100%; background:var(--gold); color:#fff;
+      border:2.5px solid var(--ink); padding:14px;
+      border-radius:999px; font-family: 'Fredoka One',cursive;
+      font-size:14px; font-weight:900; cursor:pointer;
+      text-transform:uppercase; letter-spacing:.5px;
+      box-shadow:4px 4px 0 var(--ink);
+      transition:all .22s cubic-bezier(.34,1.56,.64,1);
+    }
+    .btn-submit:hover { background:var(--blue); transform:translateY(-3px); box-shadow:6px 6px 0 var(--ink); }
+
+    /* empty state */
+    .empty-state {
+      text-align:center; padding:40px 20px;
+      border:3px dashed var(--gold); border-radius:24px;
+      background:var(--yellow); display:none;
+    }
+    .empty-state p { font-size:14px; font-weight:900; color:var(--ink); margin-top:8px; }
+
+    /* ══ TOAST ══ */
+    .toast {
+      position:fixed; bottom:32px; right:32px;
+      background:#fff; border:3px solid var(--ink);
+      border-radius:24px; padding:16px 22px;
+      display:flex; align-items:center; gap:12px;
+      box-shadow:5px 5px 0 var(--ink);
+      z-index:9999; min-width:260px;
+      transform:translateY(80px); opacity:0;
+      transition:transform .4s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+      pointer-events:none;
+    }
+    .toast.show { transform:translateY(0); opacity:1; pointer-events:auto; }
+    @keyframes toastBounce {
+      0%   { transform:scale(.5) rotate(-20deg); }
+      70%  { transform:scale(1.2) rotate(5deg); }
+      100% { transform:scale(1) rotate(0deg); }
+    }
+    .toast-content { flex:1; }
+    .toast-title { font-family:'Good Pawoo','Fredoka One',cursive; font-size:16px; color:var(--ink); margin-bottom:2px; }
+    .toast-sub { font-size:11px; color:#777; font-weight:700; }
+    .toast-close { font-size:18px; color:var(--gold); cursor:pointer; font-weight:900; transition:color .2s; }
+    .toast-close:hover { color:var(--coral); }
+    .toast-bar {
+      position:absolute; bottom:0; left:0; height:4px;
+      background:var(--gold); border-radius:0 0 20px 20px;
+      width:100%; transform-origin:left;
+    }
+    .toast.show .toast-bar { animation:shrinkBar 3.5s linear forwards; }
+    @keyframes shrinkBar { from { transform:scaleX(1); } to { transform:scaleX(0); } }
+
+    /* slide-in animation for new cards */
+    @keyframes cardSlideIn {
+      from { opacity:0; transform:translateY(24px) scale(.97); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+    .feedback-card.new-card { animation:cardSlideIn .45s cubic-bezier(.34,1.4,.64,1) forwards; border-color:var(--gold); }
+
+    /* ── IMAGE UPLOAD ── */
+    .upload-zone {
+      border:3px dashed var(--gold); border-radius:20px;
+      background:var(--yellow); padding:20px;
+      text-align:center; cursor:pointer; margin-bottom:14px;
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+      position:relative; overflow:hidden;
+    }
+    .upload-zone:hover { background:#fff3c0; transform:translateY(-2px); box-shadow:3px 3px 0 var(--gold); }
+    .upload-zone input[type="file"] {
+      position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;
+    }
+    .upload-icon { font-size:32px; display:block; margin-bottom:6px; }
+    .upload-text { font-size:12px; font-weight:900; color:var(--ink); }
+    .upload-sub  { font-size:10px; color:#888; font-weight:700; margin-top:2px; }
+
+    /* preview */
+    .img-preview-wrap {
+      display:none; position:relative; margin-bottom:14px;
+    }
+    .img-preview-wrap.show { display:block; }
+    .img-preview {
+      width:100%; max-height:160px; object-fit:cover;
+      border-radius:16px; border:3px solid var(--ink);
+      box-shadow:4px 4px 0 var(--ink); display:block;
+    }
+    .img-remove-btn {
+      position:absolute; top:-10px; right:-10px;
+      width:28px; height:28px; border-radius:50%;
+      background:var(--coral); border:2.5px solid var(--ink);
+      color:#fff; font-size:14px; font-weight:900;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; box-shadow:2px 2px 0 var(--ink);
+      transition:all .2s;
+    }
+    .img-remove-btn:hover { background:var(--ink); transform:scale(1.1); }
+
+    /* ══ FOOTER ══ */
+    .footer { background:#1A5276; overflow:hidden; }
+    .footer-body {
+      padding:50px 60px 0; display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr; gap:40px;
+      max-width:1200px; margin:0 auto;
+    }
+    .footer-brand .footer-logo { font-family:'Good Pawoo'; font-size:40px; color:var(--gold); line-height:1; margin-bottom:12px; }
+    .footer-brand p { font-size:14px; color:rgba(235,245,251,.75); line-height:1.7; max-width:240px; margin-bottom:20px; font-weight:700; }
+    .footer-socials { display:flex; gap:18px; }
+    .footer-socials a { font-family:'Calli Cat'; font-size:14px; font-weight:700; color:var(--gold); text-decoration:none; }
+    .footer-col h4 { font-family:'Good Pawoo'; font-size:20px; color:var(--gold); margin-bottom:16px; }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-col ul li a { text-decoration:none; font-size:14px; color:rgba(235,245,251,.75); transition:color .2s; font-weight:700; }
+    .footer-col ul li a:hover { color:var(--gold); }
+    .footer-contact-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; }
+    .footer-contact-item span:first-child { font-size:18px; flex-shrink:0; margin-top:2px; }
+    .footer-contact-item span:last-child { font-size:14px; color:rgba(235,245,251,.75); line-height:1.5; font-weight:700; }
+    .footer-bottom {
+      margin-top:36px; border-top:1px solid rgba(243,156,18,.25);
+      padding:18px 60px; display:flex; justify-content:space-between; align-items:center;
+      max-width:1200px; margin-left:auto; margin-right:auto;
+    }
+    .footer-bottom-text { font-size:13px; color:rgba(235,245,251,.45); font-weight:700; }
+
+    @keyframes popBounce {
+      from { opacity:0; transform:scale(.8) translateY(16px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    @media (max-width:960px) {
+      .main-wrap { grid-template-columns:1fr; padding:32px 24px 60px; }
+      .form-card { position:static; }
+      .rating-strip { padding:24px 28px; }
+      .footer-body { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:600px) {
+      .footer-body { grid-template-columns:1fr; padding:40px 28px 0; }
+      .footer-bottom { flex-direction:column; gap:8px; padding:18px 28px; }
+      .hero { padding:40px 24px 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <div class="nav-capsule">
+    <a href="Index.html">Home</a>
+    <a href="service.html">Service</a>
+    <a href="About.html">About</a>
+    <a href="pet-tures.html">Pet-tures</a>
+    <a href="review.html" class="active">Pet-view</a>
+    <a href="shop.html">Shop</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <span class="hero-bubble">★ Pet-view</span>
+  <h1>What Our <span>Pet Parents</span> Say</h1>
+  <p>Real reviews from real furry families — see why pets love us!</p>
+</div>
+
+<!-- ══ RATING SUMMARY STRIP ══ -->
+<div class="rating-strip">
+
+  <div class="score-card">
+    <div class="score-num">4.3</div>
+    <div class="score-stars">★★★★☆</div>
+    <div class="score-total">50 Ratings</div>
+  </div>
+
+  <div class="bars-card">
+    <div class="bars-card-title">Rating Breakdown</div>
+    <div class="rating-row">
+      <span class="rating-label">Five</span><span class="rating-star">★</span>
+      <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+      <span class="bar-count">989</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">Four</span><span class="rating-star">★</span>
+      <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+      <span class="bar-count">4.5K</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">Three</span><span class="rating-star">★</span>
+      <div class="bar-track"><div class="bar-fill" style="width:20%"></div></div>
+      <span class="bar-count">50</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">Two</span><span class="rating-star">★</span>
+      <div class="bar-track"><div class="bar-fill" style="width:8%"></div></div>
+      <span class="bar-count">16</span>
+    </div>
+    <div class="rating-row">
+      <span class="rating-label">One</span><span class="rating-star">★</span>
+      <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
+      <span class="bar-count">8</span>
+    </div>
+  </div>
+
+  <div class="highlights-card">
+    <div class="highlight-chip">
+      <div class="hc-text">Happy<br>Pets</div>
+      <div class="hc-num">500+</div>
+    </div>
+    <div class="highlight-chip">
+      <div class="hc-text">Return<br>Clients</div>
+      <div class="hc-num">92%</div>
+    </div>
+    <div class="highlight-chip">
+      <div class="hc-text">Star<br>Reviews</div>
+      <div class="hc-num">989</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<div class="main-wrap">
+
+  <!-- LEFT: Reviews -->
+  <div class="reviews-left">
+
+    <div class="col-title">Recent <span>Feedbacks</span></div>
+
+    <!-- Filter bar — NEW FEATURE -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" data-filter="all">All </button>
+      <button class="filter-btn" data-filter="cat">Cats</button>
+      <button class="filter-btn" data-filter="dog">Dogs</button>
+      <button class="filter-btn" data-filter="rabbit">Rabbits</button>
+      <button class="filter-btn" data-filter="hamster">Hamsters</button>
+    </div>
+
+    <!-- Reviews list -->
+    <div id="reviewsList">
+
+      <div class="feedback-card" data-pet="cat">
+        <img src="cats/ragdoll/1 (2).png" class="feedback-pet-img" alt="Cat" onerror="this.style.display='none'"/>
+        <div class="feedback-body">
+          <span class="feedback-pet-tag tag-cat">Cat Owner</span>
+          <div class="feedback-name">Vinsaint R. Panopio</div>
+          <div class="feedback-stars">★★★★★</div>
+          <div class="feedback-text">My cat Milky loves the grooming service here! So fluffy and clean after every visit. 100% recommended!</div>
+          <div class="feedback-footer">
+            <span class="feedback-date">March 15, 2026</span>
+            <button class="helpful-btn" onclick="markHelpful(this)">Helpful <span class="hcount">12</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-card" data-pet="dog">
+        <img src="dogs/corgi/1 (41).png" class="feedback-pet-img" alt="Dog" onerror="this.style.display='none'"/>
+        <div class="feedback-body">
+          <span class="feedback-pet-tag tag-dog">Dog Owner</span>
+          <div class="feedback-name">Natalie R. Galang</div>
+          <div class="feedback-stars">★★★★★</div>
+          <div class="feedback-text">My dog was well-looked after and seemed to have a good time, though there's scope to make things better.</div>
+          <div class="feedback-footer">
+            <span class="feedback-date">March 14, 2026</span>
+            <button class="helpful-btn" onclick="markHelpful(this)">Helpful <span class="hcount">8</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-card" data-pet="rabbit">
+        <img src="rabbits/english lop/1 (10).png" class="feedback-pet-img" alt="Rabbit" onerror="this.style.display='none'"/>
+        <div class="feedback-body">
+          <span class="feedback-pet-tag tag-rabbit">Rabbit Owner</span>
+          <div class="feedback-name">Rhianna A. Gregorio</div>
+          <div class="feedback-stars">★★★★☆</div>
+          <div class="feedback-text">My rabbit is in great hands! His wool is so fluffy and well-maintained — no more tangles, and he looks comfortable every time.</div>
+          <div class="feedback-footer">
+            <span class="feedback-date">March 12, 2026</span>
+            <button class="helpful-btn" onclick="markHelpful(this)">Helpful <span class="hcount">5</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-card" data-pet="hamster">
+        <img src="hamster/roborovski dwarf hamster/1 (58).png" class="feedback-pet-img" alt="Hamster" onerror="this.style.display='none'"/>
+        <div class="feedback-body">
+          <span class="feedback-pet-tag tag-hamster">Hamster Owner</span>
+          <div class="feedback-name">Kaycie M. Makiling</div>
+          <div class="feedback-stars">★★☆☆☆</div>
+          <div class="feedback-text">My hamster enjoyed the care, but there's still room for improvement. Hoping for an even better experience next time!</div>
+          <div class="feedback-footer">
+            <span class="feedback-date">March 10, 2026</span>
+            <button class="helpful-btn" onclick="markHelpful(this)">Helpful <span class="hcount">2</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-card" data-pet="cat">
+        <img src="cats/siamese/1 (4).png" class="feedback-pet-img" alt="Cat" onerror="this.style.display='none'"/>
+        <div class="feedback-body">
+          <span class="feedback-pet-tag tag-cat">Cat Owner</span>
+          <div class="feedback-name">Althea A. Fetalvero</div>
+          <div class="feedback-stars">★★★★★</div>
+          <div class="feedback-text">My cat had an amazing grooming experience! Super clean, soft, and well taken care of. Highly recommended!</div>
+          <div class="feedback-footer">
+            <span class="feedback-date">March 8, 2026</span>
+            <button class="helpful-btn" onclick="markHelpful(this)">Helpful <span class="hcount">20</span></button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /reviewsList -->
+
+    <div class="empty-state" id="emptyState">
+      <p>No reviews for this pet type yet!</p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: Form -->
+  <div class="reviews-right">
+    <div class="form-card">
+      <div class="form-card-title">Add a <span>Review</span></div>
+      <div class="form-card-sub">Share your experience with other pet parents! </div>
+
+      <label class="form-label">Your Rating *</label>
+      <div class="star-select" id="starSelect">
+        <span onclick="setRating(1)" id="s1">★</span>
+        <span onclick="setRating(2)" id="s2">★</span>
+        <span onclick="setRating(3)" id="s3">★</span>
+        <span onclick="setRating(4)" id="s4">★</span>
+        <span onclick="setRating(5)" id="s5">★</span>
+      </div>
+
+      <label class="form-label">Your Pet *</label>
+      <div class="form-pet-select">
+        <div class="pet-chip" onclick="toggleChip(this)">Cat</div>
+        <div class="pet-chip" onclick="toggleChip(this)">Dog</div>
+        <div class="pet-chip" onclick="toggleChip(this)">Rabbit</div>
+        <div class="pet-chip" onclick="toggleChip(this)">Hamster</div>
+      </div>
+
+      <label class="form-label">Your Name *</label>
+      <input class="form-input" id="inputName" type="text" placeholder="Linda Walker"/>
+
+      <label class="form-label">Email</label>
+      <input class="form-input" id="inputEmail" type="email" placeholder="linda@email.com"/>
+
+      <label class="form-label">Your Review *</label>
+      <textarea class="form-textarea" id="inputReview" placeholder="Tell us about your experience..."></textarea>
+
+      <!-- character count -->
+      <div style="text-align:right; font-family:'Fredoka One',cursive;font-size:11px; color:#aaa; font-weight:700; margin-top:-10px; margin-bottom:14px;">
+        <span id="charCount">0</span>/300
+      </div>
+
+      <!-- IMAGE UPLOAD -->
+      <label class="form-label">Pet Photo (optional) </label>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="petPhotoInput" accept="image/*"/>
+        <span class="upload-icon"></span>
+        <div class="upload-text">Click to upload your pet's photo</div>
+        <div class="upload-sub">JPG, PNG, GIF — max 5MB</div>
+      </div>
+
+      <!-- image preview -->
+      <div class="img-preview-wrap" id="previewWrap">
+        <img class="img-preview" id="imgPreview" src="" alt="Pet photo preview"/>
+        <div class="img-remove-btn" onclick="removeImage()" title="Remove photo">✕</div>
+      </div>
+
+      <button class="btn-submit">Submit Review </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="submitToast">
+  <div class="toast-content">
+    <div class="toast-title">Review Submitted!</div>
+    <div class="toast-sub">Thanks! Your feedback means a lot to us.</div>
+  </div>
+  <span class="toast-close" onclick="closeToast()">✕</span>
+  <div class="toast-bar"></div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <div class="footer-body">
+    <div class="footer-brand">
+      <div class="footer-logo">ฅ^•ﻌ•^ฅ</div>
+      <div class="footer-logo">PurrCare co.</div>
+      <p>Where every pet is treated like family — with love, care, and a whole lot of paw-sion.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/won_jww" target="_blank" rel="noopener">◙</a>
+        <a href="https://www.twitter.com/aea29858" target="_blank" rel="noopener">✕</a>
+        <a href="https://mail.google.com/mail/?view=cm&to=aea29858@gmail.com" target="_blank">✉</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="Index.html">Home</a></li>
+        <li><a href="service.html">Service</a></li>
+        <li><a href="About.html">About</a></li>
+        <li><a href="pet-tures.html">Pet-tures</a></li>
+        <li><a href="review.html">Pet-view</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Grooming</a></li>
+        <li><a href="#">Boarding</a></li>
+        <li><a href="#">Feeding</a></li>
+        <li><a href="#">Health Check</a></li>
+        <li><a href="#">Playtime</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <div class="footer-contact-item"><span>⟟</span><span>Pasig City, Metro Manila, Philippines</span></div>
+      <div class="footer-contact-item"><span>✉</span><span>helloPurrCareco.ph</span></div>
+      <div class="footer-contact-item"><span>⏲</span><span>Mon to Sun: Open all day!</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-text">© PurrCare co. — Made with love for pets everywhere</div>
+  </div>
+</div>
+
+<script>
+  let currentRating = 0;
+  let toastTimer = null;
+  let uploadedImageSrc = null;
+
+  /* ── Image upload ── */
+  document.getElementById('petPhotoInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { alert('Image too large! Max 5MB.'); return; }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      uploadedImageSrc = e.target.result;
+      document.getElementById('imgPreview').src = uploadedImageSrc;
+      document.getElementById('previewWrap').classList.add('show');
+      document.getElementById('uploadZone').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function removeImage() {
+    uploadedImageSrc = null;
+    document.getElementById('petPhotoInput').value = '';
+    document.getElementById('imgPreview').src = '';
+    document.getElementById('previewWrap').classList.remove('show');
+    document.getElementById('uploadZone').style.display = 'block';
+  }
+
+  /* ── Star rating ── */
+  function setRating(n) {
+    currentRating = n;
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('s'+i).classList.toggle('active', i <= n);
+    }
+  }
+
+  /* ── Pet chip ── */
+  function toggleChip(el) {
+    document.querySelectorAll('.pet-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ── Character count ── */
+  document.getElementById('inputReview').addEventListener('input', function() {
+    const len = Math.min(this.value.length, 300);
+    document.getElementById('charCount').textContent = len;
+    if (this.value.length > 300) this.value = this.value.slice(0, 300);
+  });
+
+  /* ── Filter ── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      const cards = document.querySelectorAll('#reviewsList .feedback-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.pet === filter;
+        card.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+      document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+    });
+  });
+
+  /* ── Helpful button ── */
+  function markHelpful(btn) {
+    if (btn.classList.contains('liked')) return;
+    btn.classList.add('liked');
+    const count = btn.querySelector('.hcount');
+    count.textContent = parseInt(count.textContent) + 1;
+  }
+
+  /* ── Toast ── */
+  function showToast() {
+    const toast = document.getElementById('submitToast');
+    toast.classList.remove('show');
+    void toast.offsetWidth;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => closeToast(), 3500);
+  }
+  function closeToast() {
+    document.getElementById('submitToast').classList.remove('show');
+    clearTimeout(toastTimer);
+  }
+
+  /* ── Submit ── */
+  document.querySelector('.btn-submit').addEventListener('click', function() {
+    const name   = document.getElementById('inputName').value.trim();
+    const review = document.getElementById('inputReview').value.trim();
+    const activeChip = document.querySelector('.pet-chip.active');
+
+    if (!name)          { alert('Please enter your name!'); return; }
+    if (!currentRating) { alert('Please add your rating!'); return; }
+    if (!review)        { alert('Please write your review!'); return; }
+
+    const petText = activeChip ? activeChip.textContent.trim() : 'Pet';
+    const petTag  = activeChip ? activeChip.textContent.toLowerCase() : '';
+
+    let tagClass = 'tag-cat';
+    let petType  = 'Pet Owner';
+    let imgSrc   = 'cat.png';
+    let dataPet  = 'cat';
+
+    if      (petTag.includes('dog'))     { tagClass='tag-dog';     petType='Dog Owner';     imgSrc='dog.png';     dataPet='dog'; }
+    else if (petTag.includes('rabbit'))  { tagClass='tag-rabbit';  petType='Rabbit Owner';  imgSrc='rabbit.png';  dataPet='rabbit'; }
+    else if (petTag.includes('hamster')) { tagClass='tag-hamster'; petType='Hamster Owner'; imgSrc='hams.png';    dataPet='hamster'; }
+
+    // use uploaded photo if available
+    if (uploadedImageSrc) imgSrc = uploadedImageSrc;
+
+    const stars = '★'.repeat(currentRating) + '☆'.repeat(5 - currentRating);
+    const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+    const card = document.createElement('div');
+    card.className = 'feedback-card new-card';
+    card.dataset.pet = dataPet;
+    card.innerHTML = `
+      <img src="${imgSrc}" class="feedback-pet-img" alt="Pet" onerror="this.style.display='none'"/>
+      <div class="feedback-body">
+        <span class="feedback-pet-tag ${tagClass}">${petType}</span>
+        <div class="feedback-name">${name}</div>
+        <div class="feedback-stars">${stars}</div>
+        <div class="feedback-text">${review}</div>
+        <div class="feedback-footer">
+          <span class="feedback-date">${today}</span>
+          <button class="helpful-btn" onclick="markHelpful(this)">Helpful <span class="hcount">0</span></button>
+        </div>
+      </div>
+    `;
+
+    const list = document.getElementById('reviewsList');
+    list.insertBefore(card, list.firstChild);
+    card.scrollIntoView({ behavior:'smooth', block:'center' });
+    card.addEventListener('animationend', () => card.classList.remove('new-card'), { once:true });
+
+    showToast();
+
+    /* reset */
+    document.getElementById('inputName').value   = '';
+    document.getElementById('inputEmail').value  = '';
+    document.getElementById('inputReview').value = '';
+    document.getElementById('charCount').textContent = '0';
+    currentRating = 0;
+    for (let i = 1; i <= 5; i++) document.getElementById('s'+i).classList.remove('active');
+    document.querySelectorAll('.pet-chip').forEach(c => c.classList.remove('active'));
+
+    /* reset filter to all */
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+    document.querySelectorAll('#reviewsList .feedback-card').forEach(c => c.classList.remove('hidden'));
+    document.getElementById('emptyState').style.display = 'none';
+  });
+  
+</script>
+
+</body>
+</html>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PurrCare co. — Book an Appointment</title>
+  <style>
+    @font-face { font-family:'Good Pawoo'; src:url('Good Pawoo - Display.ttf'); }
+    @font-face { font-family:'Calli Cat';  src:url('Calli Cat.ttf'); }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --blue:    #2E86C1;
+      --bluedark:#1A5276;
+      --gold:    #F39C12;
+      --coral:   #FF6B6B;
+      --mint:    #2ECC71;
+      --sky:     #56CCF2;
+      --yellow:  #FFE066;
+      --peach:   #FFD6BA;
+      --white:   #FFFFFF;
+      --ink:     #1c3d56;
+    }
+
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:'Calli Cat';
+      background:#FFFBF4; color:var(--ink); overflow-x:hidden;
+      margin:0; padding:0;
+    }
+
+    /* ══ NAVBAR ══ */
+    .navbar {
+      display:flex; align-items:center; justify-content:center;
+      padding:10px 40px;
+      background:url('head.jpg') center/cover no-repeat;
+      min-height:120px; position:relative;
+    }
+    .nav-capsule {
+      background:rgba(255,255,255,0.96);
+      border-radius:999px; padding:12px 40px;
+      display:flex; gap:32px; align-items:center;
+      border:3px solid var(--gold);
+      box-shadow:5px 5px 0 var(--gold);
+      position:relative; z-index:2;
+    }
+    .nav-capsule a {
+      text-decoration:none; font-size:13px; color:var(--gold);
+      font-weight:900; text-transform:uppercase; letter-spacing:.5px; transition:color .2s;
+    }
+    .nav-capsule a:hover { color:var(--blue); }
+    .nav-capsule a.active {
+      background:var(--blue); color:#fff;
+      padding:5px 18px; border-radius:999px; border:2px solid var(--bluedark);
+    }
+
+    /* ══ HERO ══ */
+    .booking-hero {
+      min-height:38vh;
+      padding:60px 60px 50px;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; position:relative; overflow:hidden;
+      background:url('road.jpg') center/cover no-repeat;
+      border-bottom:4px dashed var(--gold);
+    }
+    .booking-hero-overlay {
+      position:absolute; inset:0;
+      background:rgba(255,230,80,.6);
+      z-index:1;
+    }
+    /* dot texture */
+    .booking-hero::after {
+      content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background-image:radial-gradient(circle, rgba(26,82,118,.1) 1.5px, transparent 1.5px);
+      background-size:26px 26px;
+    }
+    .booking-hero h1 {
+      position:relative; z-index:2;
+      font-family:'Good Pawoo','Fredoka One',cursive;
+      font-size:clamp(36px,5vw,64px);
+      color:var(--ink); margin-bottom:12px;
+      animation:popBounce .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .booking-hero h1 span { color:var(--coral); }
+    .booking-hero p {
+      position:relative; z-index:2;
+      font-size:15px; color:#444; font-weight:700;
+      max-width:460px; margin:0 auto; line-height:1.7;
+      animation:popBounce .6s .1s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    /* hero bubble tag */
+    .hero-bubble {
+      position:relative; z-index:2;
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--coral); color:#fff;
+      font-size:12px; font-weight:900; letter-spacing:2px; text-transform:uppercase;
+      padding:8px 22px; border-radius:999px;
+      border:3px solid var(--ink); box-shadow:4px 4px 0 var(--ink);
+      margin-bottom:16px;
+      animation:popBounce .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    /* ══ BOOKING CONTENT ══ */
+    .booking-content {
+      padding:50px 60px 80px;
+      background-color: var(--sky);
+      background-image: radial-gradient(circle, rgba(255,255,255,.35) 2px, transparent 2px);
+      background-size:24px 24px;
+    }
+
+    /* Steps */
+    .steps-wrap {
+      display:flex; align-items:center; justify-content:center; margin-bottom:40px;
+      background:#fff; border-radius:999px; padding:14px 32px;
+      border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink);
+      width:fit-content; margin-left:auto; margin-right:auto;
+    }
+    .step { display:flex; align-items:center; gap:10px; }
+    .step-num {
+      width:40px; height:40px; border-radius:50%;
+      background:#fff; border:3px solid var(--ink);
+      color:var(--ink); font-weight:900; font-size:15px;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:all .3s;
+      box-shadow:3px 3px 0 var(--ink);
+      font-family:'Fredoka One',cursive;
+    }
+    .step.active .step-num {
+      background:var(--gold); border-color:var(--ink);
+      color:#fff; box-shadow:3px 3px 0 var(--ink);
+    }
+    .step.done .step-num {
+      background:var(--mint); border-color:var(--ink); color:#fff;
+    }
+    .step-label {
+      font-size:12px; font-weight:900; color:#999;
+      text-transform:uppercase; letter-spacing:.5px;
+    }
+    .step.active .step-label { color:var(--gold); }
+    .step.done .step-label { color:var(--mint); }
+    .step-line {
+      width:50px; height:3px; border-radius:999px;
+      background:#e0e0e0; margin:0 12px; flex-shrink:0;
+    }
+
+    /* Grid */
+    .booking-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:28px;
+      max-width:1060px; margin:0 auto;
+    }
+
+    /* Each column gets a card panel */
+    .booking-grid > div {
+      background:#fff;
+      border-radius:28px; border:3px solid var(--ink);
+      box-shadow:6px 6px 0 var(--ink);
+      padding:28px 26px;
+    }
+
+    /* Section headers */
+    .section-head {
+      display:flex; align-items:center; gap:12px; margin-bottom:18px;
+      background:var(--yellow); border-radius:14px; padding:10px 16px;
+      border:2.5px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+    }
+    .section-head h2 {
+      font-family:'Good Pawoo','Fredoka One',cursive;
+      font-size:22px; color:var(--ink); white-space:nowrap;
+    }
+    .section-head h2 span { color:var(--coral); }
+    .section-line { flex:1; height:2px; background:var(--ink); opacity:.15; }
+
+    /* Calendar */
+    .cal-nav {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:14px; gap:8px;
+    }
+    .cal-nav-btn {
+      padding:8px 18px; border-radius:999px;
+      border:2.5px solid var(--ink); background:#fff;
+      font-family:'Fredoka One',cursive; font-size:12px; font-weight:900;
+      color:var(--ink); cursor:pointer;
+      box-shadow:3px 3px 0 var(--ink);
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .cal-nav-btn:hover { background:var(--yellow); transform:translateY(-2px); }
+    .cal-month {
+      font-family:'Fredoka One',cursive;
+      font-size:20px; color:var(--ink); text-align:center; flex:1;
+    }
+
+    .weekday-header {
+      display:grid; grid-template-columns:repeat(7,1fr); gap:3px;
+      margin-bottom:6px; background:var(--yellow);
+      padding:6px 3px; border-radius:12px;
+      border:2px solid var(--ink);
+    }
+    .weekday { text-align:center; font-weight:900; color:var(--ink); font-size:10px; }
+
+    .calendar-days { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+
+    .day-cell {
+      aspect-ratio:1; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      border:2.5px solid transparent; border-radius:12px;
+      cursor:pointer; transition:all .2s;
+      background:#f7f7f7; padding:2px; min-height:44px;
+    }
+    .day-cell .day-number { font-family:'Fredoka One',cursive; font-size:12px; color:var(--ink); font-weight:800; margin-bottom:2px; }
+    .day-cell .slot-count { font-family:'Fredoka One',cursive; font-size:7px; font-weight:700; text-align:center; line-height:1.2; }
+
+    .day-cell.available { font-family:'Fredoka One',cursive; border-color:var(--blue); background:#EBF5FB; }
+    .day-cell.available:hover { font-family:'Fredoka One',cursive;
+      background:var(--blue); border-color:var(--ink);
+      transform:translateY(-3px); box-shadow:3px 4px 0 var(--ink);
+    }
+    .day-cell.available:hover .day-number,
+    .day-cell.available:hover .slot-count { color:#fff; }
+    .day-cell.available .slot-count { color:var(--blue); }
+
+    .day-cell.limited { border-color:var(--gold); background:#FEF9EE; }
+    .day-cell.limited:hover {
+      background:var(--gold); border-color:var(--ink);
+      transform:translateY(-3px); box-shadow:3px 4px 0 var(--ink);
+    }
+    .day-cell.limited:hover .day-number,
+    .day-cell.limited:hover .slot-count { color:#fff; }
+    .day-cell.limited .slot-count { color:var(--gold); }
+
+    .day-cell.full { border-color:var(--coral); background:#FFF0F0; cursor:not-allowed; opacity:.65; }
+    .day-cell.full .slot-count { color:var(--coral); }
+
+    .day-cell.disabled { opacity:.2; cursor:default; background:#f0f0f0; border-color:transparent; }
+
+    .day-cell.selected-day {
+      background:var(--gold) !important; border-color:var(--ink) !important;
+      transform:translateY(-3px); box-shadow:3px 4px 0 var(--ink);
+    }
+    .day-cell.selected-day .day-number,
+    .day-cell.selected-day .slot-count { color:#fff !important; }
+
+    /* Legend */
+    .cal-legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:12px; }
+    .legend-item { display:flex; align-items:center; gap:6px; font-size:11px; color:#555; font-weight:700; }
+    .legend-dot { width:12px; height:12px; border-radius:4px; border:2px solid var(--ink); flex-shrink:0; }
+
+    /* Time slots */
+    .no-date-msg {
+      text-align:center; color:#aaa;
+      font-size:13px; font-weight:700;
+      padding:32px 20px;
+      border:3px dashed var(--gold); border-radius:20px;
+      background:#FFFBEA;
+    }
+    .time-slots-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+    .time-slot {
+      padding:10px 8px;
+      border:2.5px solid var(--ink); border-radius:12px;
+      background:#fff; font-family:'Fredoka One',cursive;
+      font-size:12px; font-weight:900; color:var(--ink);
+      cursor:pointer; transition:all .2s cubic-bezier(.34,1.56,.64,1);
+      text-align:center; min-height:40px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:3px 3px 0 var(--ink);
+    }
+    .time-slot:hover:not(:disabled) {
+      background:var(--yellow); transform:translateY(-3px);
+      box-shadow:4px 5px 0 var(--ink);
+    }
+    .time-slot.selected {
+      background:var(--gold); border-color:var(--ink); color:#fff;
+      transform:translateY(-3px); box-shadow:4px 5px 0 var(--ink);
+    }
+    .time-slot:disabled {
+      opacity:.45; cursor:not-allowed; background:#f0f0f0;
+      color:#aaa; border-color:#ccc; font-size:11px;
+      transform:none; box-shadow:none;
+    }
+
+    /* Summary card */
+    .summary-card {
+      margin-top:20px; background:var(--yellow);
+      border-radius:20px; border:3px solid var(--ink);
+      padding:18px 20px; display:none;
+      box-shadow:4px 4px 0 var(--ink);
+    }
+    .summary-card .summary-title {
+      font-family:'Good Pawoo','Fredoka One',cursive;
+      font-size:16px; color:var(--ink); margin-bottom:10px;
+    }
+    .summary-card p { font-size:13px; color:var(--ink); font-weight:700; margin:4px 0; }
+    .summary-card p span { font-family:'Fredoka One',cursive; color:var(--blue); font-weight:900; }
+
+    /* Action buttons */
+    .booking-actions {
+      max-width:1060px; margin:24px auto 0;
+      display:flex; gap:14px; justify-content:flex-end;
+    }
+    .btn-back {
+      padding:12px 28px; border-radius:999px;
+      border:2.5px solid var(--ink); background:#fff;
+      font-family:'Fredoka One',cursive; font-size:13px; font-weight:900;
+      color:var(--ink); cursor:pointer;
+      box-shadow:3px 3px 0 var(--ink);
+      transition:all .2s; text-decoration:none;
+      display:flex; align-items:center;
+    }
+    .btn-back:hover { background:var(--yellow); transform:translateY(-2px); }
+    .btn-confirm {
+      padding:12px 32px; border-radius:999px;
+      border:2.5px solid var(--ink); background:var(--gold);
+      font-family:'Fredoka One',cursive; font-size:13px; font-weight:900;
+      color:#fff; cursor:pointer;
+      box-shadow:4px 4px 0 var(--ink);
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+      text-transform:uppercase; letter-spacing:.5px;
+    }
+    .btn-confirm:hover { background:var(--coral); transform:translateY(-3px); box-shadow:6px 6px 0 var(--ink); }
+    .btn-confirm:disabled { font-family:'Fredoka One',cursive;
+      background:#e0e0e0; color:#aaa; cursor:not-allowed;
+      transform:none; box-shadow:2px 2px 0 #bbb; border-color:#ccc;
+    }
+
+    /* ══ SUCCESS MODAL ══ */
+    .lightbox {
+      position:fixed; inset:0; background:rgba(26,82,118,.88);
+      z-index:999; display:flex; align-items:center; justify-content:center;
+      opacity:0; visibility:hidden; transition:all .3s;
+    }
+    .lightbox.open { opacity:1; visibility:visible; }
+    .success-box {
+      background:#fff; border-radius:28px;
+      padding:44px 38px; max-width:420px; width:90%;
+      text-align:center;
+      border:4px solid var(--ink); box-shadow:8px 8px 0 var(--ink);
+      animation:popIn .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popIn {
+      from { transform:scale(.8); opacity:0; }
+      to   { transform:scale(1); opacity:1; }
+    }
+  
+    .success-box h2 {
+      font-family:'Good Pawoo','Fredoka One',cursive;
+      font-size:28px; color:var(--ink); margin-bottom:8px;
+    }
+    .success-box h2 span { color:var(--gold); }
+    .success-box > p { font-family:'Fredoka One',cursive; font-size:14px; color:#777; margin-bottom:20px; line-height:1.6; font-weight:700; }
+    .success-details {
+      background:var(--yellow); border-radius:16px;
+      padding:16px 20px; text-align:left; margin-bottom:22px;
+      border:2.5px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+    }
+    .success-details p {  font-family:'Fredoka One',cursive; font-size:13px; color:var(--ink); font-weight:800; margin:5px 0; }
+    .success-details strong { color:var(--coral); }
+    .btn-proceed {
+      width:100%; padding:14px;
+      border-radius:999px; border:2.5px solid var(--ink);
+      background:var(--blue); font-family:'Fredoka One',cursive;
+      font-size:14px; font-weight:900; color:#fff; cursor:pointer;
+      box-shadow:4px 4px 0 var(--ink);
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+      text-transform:uppercase; letter-spacing:.5px;
+    }
+    .btn-proceed:hover { background:var(--gold); transform:translateY(-3px); box-shadow:6px 6px 0 var(--ink); }
+
+    /* ══ FOOTER — same as index/service ══ */
+    .footer { background:#1A5276; overflow:hidden; }
+    .footer-body {
+      padding:50px 60px 0; display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr; gap:40px;
+      max-width:1200px; margin:0 auto;
+    }
+    .footer-brand .footer-logo { font-family:'Good Pawoo'; font-size:40px; color:var(--gold); line-height:1; margin-bottom:12px; }
+    .footer-brand p { font-size:14px; color:rgba(235,245,251,.75); line-height:1.7; max-width:240px; margin-bottom:20px; font-weight:700; }
+    .footer-socials { display:flex; gap:18px; }
+    .footer-socials a { font-family:'Calli Cat'; font-size:14px; font-weight:700; color:var(--gold); text-decoration:none; }
+    .footer-col h4 { font-family:'Good Pawoo'; font-size:20px; color:var(--gold); margin-bottom:16px; }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-col ul li a { text-decoration:none; font-size:14px; color:rgba(235,245,251,.75); transition:color .2s; font-weight:700; }
+    .footer-col ul li a:hover { color:var(--gold); }
+    .footer-contact-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; }
+    .footer-contact-item span:first-child { font-size:18px; flex-shrink:0; margin-top:2px; }
+    .footer-contact-item span:last-child { font-size:14px; color:rgba(235,245,251,.75); line-height:1.5; font-weight:700; }
+    .footer-bottom {
+      margin-top:36px; border-top:1px solid rgba(243,156,18,.25);
+      padding:18px 60px; display:flex; justify-content:space-between; align-items:center;
+      max-width:1200px; margin-left:auto; margin-right:auto;
+    }
+    .footer-bottom-text { font-size:13px; color:rgba(235,245,251,.45); font-weight:700; }
+
+    @keyframes popBounce {
+      from { opacity:0; transform:scale(.8) translateY(16px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    @media (max-width:820px) {
+      .booking-grid { grid-template-columns:1fr; }
+      .booking-content { padding:30px 24px 60px; }
+      .footer-body { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:600px) {
+      .step-line { width:24px; margin:0 6px; }
+      .step-label { display:none; }
+      .booking-actions { flex-direction:column; }
+      .btn-back, .btn-confirm { width:100%; justify-content:center; text-align:center; }
+      .footer-body { grid-template-columns:1fr; padding:40px 28px 0; }
+      .footer-bottom { flex-direction:column; gap:8px; padding:18px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <div class="nav-capsule">
+    <a href="Index.html">Home</a>
+    <a href="service.html">Service</a>
+    <a href="About.html">About</a>
+    <a href="pet-tures.html">Pet-tures</a>
+    <a href="review.html">Pet-view</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="booking-hero">
+  <div class="booking-hero-overlay"></div>
+  <span class="hero-bubble">🗒 Book Now</span>
+  <h1>Book an <span>Appointment</span></h1>
+  <p>Pick your preferred date and time — we'll be ready for your fur baby!</p>
+</div>
+
+<!-- ══ CONTENT ══ -->
+<div class="booking-content">
+
+  <!-- Steps -->
+  <div class="steps-wrap">
+    <div class="step active" id="step1">
+      <div class="step-num">1</div>
+      <div class="step-label">Pick a Date</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step2">
+      <div class="step-num">2</div>
+      <div class="step-label">Pick a Time</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div>
+      <div class="step-label">Confirm</div>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="booking-grid">
+
+    <!-- LEFT: Calendar -->
+    <div>
+      <div class="section-head">
+        <h2>☐ Select <span>Date</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" id="prevBtn">◀ Prev</button>
+        <div class="cal-month" id="monthYear"></div>
+        <button class="cal-nav-btn" id="nextBtn">Next ▶</button>
+      </div>
+      <div class="weekday-header">
+        <div class="weekday">Sun</div><div class="weekday">Mon</div>
+        <div class="weekday">Tue</div><div class="weekday">Wed</div>
+        <div class="weekday">Thu</div><div class="weekday">Fri</div>
+        <div class="weekday">Sat</div>
+      </div>
+      <div class="calendar-days" id="calendarDays"></div>
+      <div class="cal-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue);"></div> Available</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--gold);"></div> Limited</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--coral);"></div> Full</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Time + Summary -->
+    <div>
+      <div class="section-head">
+        <h2>⏲Select <span>Time</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="timeSlotsWrap">
+        <div class="no-date-msg">Please select a date first!</div>
+      </div>
+      <div class="summary-card" id="summaryCard">
+        <div class="summary-title"> Your Appointment</div>
+        <p>☐ Date: <span id="summaryDate">—</span></p>
+        <p>⏲ Time: <span id="summaryTime">—</span></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Actions -->
+  <div class="booking-actions">
+    <a href="service.html" class="btn-back">← Back</a>
+    <button class="btn-confirm" id="confirmBtn" disabled>Confirm Appointment </button>
+  </div>
+
+</div>
+
+<!-- ══ SUCCESS MODAL ══ -->
+<div class="lightbox" id="successModal">
+  <div class="success-box">
+    <h2>Appointment <span>Confirmed!</span></h2>
+    <p>Your appointment has been booked successfully. We can't wait to meet your fur baby!</p>
+    <div class="success-details" id="successDetails"></div>
+    <button class="btn-proceed" id="proceedBtn">Back to Services →</button>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <div class="footer-body">
+    <div class="footer-brand">
+      <div class="footer-logo">ฅ^•ﻌ•^ฅ</div>
+      <div class="footer-logo">PurrCare co.</div>
+      <p>Where every pet is treated like family — with love, care, and a whole lot of paw-sion.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/won_jww" target="_blank" rel="noopener">◙</a>
+        <a href="https://www.twitter.com/aea29858" target="_blank" rel="noopener">✕</a>
+        <a href="https://mail.google.com/mail/?view=cm&to=aea29858@gmail.com" target="_blank">✉</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="Index.html">Home</a></li>
+        <li><a href="service.html">Service</a></li>
+        <li><a href="About.html">About</a></li>
+        <li><a href="pet-tures.html">Pet-tures</a></li>
+        <li><a href="review.html">Pet-view</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Grooming</a></li>
+        <li><a href="#">Boarding</a></li>
+        <li><a href="#">Feeding</a></li>
+        <li><a href="#">Health Check</a></li>
+        <li><a href="#">Playtime</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <div class="footer-contact-item"><span>⟟</span><span>Pasig City, Metro Manila, Philippines</span></div>
+      <div class="footer-contact-item"><span>✉</span><span>helloPurrCareco.ph</span></div>
+      <div class="footer-contact-item"><span>⏲</span><span>Mon to Sun: Open all day!</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-text">© PurrCare co. — Made with love for pets everywhere</div>
+  </div>
+</div>
+
+<script>
+  let currentDate = new Date();
+  let selectedDate = null;
+  let selectedSlot = null;
+
+  const slotsPerDay = 10;
+  const bookedSlots = {
+    '2026-03-20': 8, '2026-03-21': 10, '2026-03-22': 5,
+    '2026-03-24': 3, '2026-03-25': 7, '2026-03-26': 10,
+    '2026-03-27': 2, '2026-03-28': 6,
+  };
+
+  const timeSlotsList = [
+    '08:00 AM','08:30 AM','09:00 AM','09:30 AM',
+    '10:00 AM','10:30 AM','01:00 PM','01:30 PM',
+    '02:00 PM','02:30 PM'
+  ];
+
+  const months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+
+  function getDateKey(date) {
+    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  }
+
+  function getAvailable(date) {
+    return slotsPerDay - (bookedSlots[getDateKey(date)] || 0);
+  }
+
+  function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    document.getElementById('monthYear').textContent = `${months[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const grid = document.getElementById('calendarDays');
+    grid.innerHTML = '';
+
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'day-cell disabled';
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(year, month, d);
+      const avail = getAvailable(date);
+      const cell = document.createElement('div');
+      cell.className = 'day-cell';
+
+      if (date < today) {
+        cell.classList.add('disabled');
+      } else if (avail <= 0) {
+        cell.classList.add('full');
+      } else if (avail <= 3) {
+        cell.classList.add('limited');
+        cell.addEventListener('click', () => pickDate(date));
+      } else {
+        cell.classList.add('available');
+        cell.addEventListener('click', () => pickDate(date));
+      }
+
+      if (selectedDate && getDateKey(date) === getDateKey(selectedDate)) {
+        cell.classList.add('selected-day');
+      }
+
+      cell.innerHTML = `<div class="day-number">${d}</div><div class="slot-count">${Math.max(avail,0)}/${slotsPerDay}</div>`;
+      grid.appendChild(cell);
+    }
+  }
+
+  function pickDate(date) {
+    selectedDate = date;
+    selectedSlot = null;
+    document.getElementById('confirmBtn').disabled = true;
+    document.getElementById('summaryTime').textContent = '—';
+
+    document.getElementById('step1').classList.add('done');
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('step2').classList.remove('done');
+    document.getElementById('step3').classList.remove('active','done');
+
+    renderCalendar();
+    renderTimeSlots();
+
+    document.getElementById('summaryDate').textContent = date.toLocaleDateString('en-US', {
+      weekday:'long', year:'numeric', month:'long', day:'numeric'
+    });
+    document.getElementById('summaryCard').style.display = 'block';
+  }
+
+  function renderTimeSlots() {
+    const wrap = document.getElementById('timeSlotsWrap');
+    const avail = getAvailable(selectedDate);
+    wrap.innerHTML = '';
+    const grid = document.createElement('div');
+    grid.className = 'time-slots-grid';
+
+    timeSlotsList.forEach((slot, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'time-slot';
+      btn.type = 'button';
+      btn.textContent = slot;
+
+      if (avail <= 0 || i >= avail) {
+        btn.disabled = true;
+        btn.textContent = 'Booked';
+      } else {
+        btn.addEventListener('click', () => pickSlot(slot, btn));
+      }
+      grid.appendChild(btn);
+    });
+
+    wrap.appendChild(grid);
+  }
+
+  function pickSlot(slot, btn) {
+    document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedSlot = slot;
+
+    document.getElementById('summaryTime').textContent = slot;
+    document.getElementById('confirmBtn').disabled = false;
+
+    document.getElementById('step2').classList.add('done');
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step3').classList.add('active');
+  }
+
+  document.getElementById('confirmBtn').addEventListener('click', () => {
+    if (!selectedDate || !selectedSlot) return;
+
+    const dateKey = getDateKey(selectedDate);
+    bookedSlots[dateKey] = (bookedSlots[dateKey] || 0) + 1;
+
+    const dateStr = selectedDate.toLocaleDateString('en-US', {
+      year:'numeric', month:'long', day:'numeric'
+    });
+
+    try { sessionStorage.setItem('bookedDate', `${dateStr} at ${selectedSlot}`); } catch(e) {}
+
+    document.getElementById('successDetails').innerHTML = `
+      <p><strong> Date:</strong> ${dateStr}</p>
+      <p><strong>⏲ Time:</strong> ${selectedSlot}</p>
+    `;
+
+    document.getElementById('successModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    document.getElementById('step3').classList.add('done');
+    document.getElementById('step3').classList.remove('active');
+  });
+
+  document.getElementById('proceedBtn').addEventListener('click', () => {
+    document.getElementById('successModal').classList.remove('open');
+    document.body.style.overflow = '';
+    window.location.href = 'service.html';
+  });
+
+  document.getElementById('successModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar();
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar();
+  });
+
+  renderCalendar();
+</script>
+</body>
+</html>

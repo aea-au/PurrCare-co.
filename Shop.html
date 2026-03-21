@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PurrCare co. — Shop</title>
+  <style>
+    @font-face { font-family:'Good Pawoo'; src:url('Good Pawoo - Display.ttf'); }
+    @font-face { font-family:'Calli Cat';  src:url('Calli Cat.ttf'); }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --blue:    #2E86C1;
+      --bluedark:#1A5276;
+      --gold:    #F39C12;
+      --coral:   #FF6B6B;
+      --mint:    #2ECC71;
+      --purple:  #9B59B6;
+      --sky:     #56CCF2;
+      --yellow:  #FFE066;
+      --peach:   #FFD6BA;
+      --white:   #FFFFFF;
+      --ink:     #1c3d56;
+    }
+
+    html { scroll-behavior:smooth; }
+    body { font-family:'Calli Cat', sans-serif; background:#FFFBF4; color:var(--ink); overflow-x:hidden; }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      display:flex; align-items:center; justify-content:center;
+      padding:18px 40px;
+      background:url('head.jpg') center/cover no-repeat;
+      min-height:120px; position:relative;
+    }
+    .nav-capsule {
+      background:rgba(255,255,255,0.96); border-radius:999px; padding:12px 40px;
+      display:flex; gap:32px; align-items:center;
+      border:3px solid var(--gold); box-shadow:5px 5px 0 var(--gold);
+      position:relative; z-index:2;
+    }
+    .nav-capsule a {
+      text-decoration:none; font-size:13px; color:var(--gold);
+      font-weight:900; text-transform:uppercase; letter-spacing:.5px; transition:color .2s;
+    }
+    .nav-capsule a:hover { color:var(--blue); }
+    .nav-capsule a.active {
+      background:var(--gold); color:#fff;
+      padding:5px 18px; border-radius:999px; border:2px solid var(--bluedark);
+    }
+
+    /* ── HERO ── */
+    .shop-hero {
+      padding:70px 60px 60px; background:var(--yellow);
+      border-bottom:4px solid var(--ink);
+      position:relative; overflow:hidden;
+      display:grid; grid-template-columns:1fr auto;
+      align-items:center; gap:40px;
+    }
+    .shop-hero::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background-image:radial-gradient(circle, rgba(26,82,118,.1) 1.5px, transparent 1.5px);
+      background-size:24px 24px;
+    }
+    .shop-hero-left { position:relative; z-index:1; }
+    .shop-hero-eyebrow {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--coral); color:#fff;
+      font-size:12px; font-weight:900; letter-spacing:2px; text-transform:uppercase;
+      padding:8px 22px; border-radius:999px;
+      border:3px solid var(--ink); box-shadow:4px 4px 0 var(--ink);
+      margin-bottom:18px;
+      animation:popBounce .6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .shop-hero h1 {
+      font-family:'Good Pawoo', cursive;
+      font-size:clamp(44px,6vw,82px); line-height:1.0; color:var(--ink);
+      margin-bottom:14px;
+      animation:popBounce .6s .08s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .shop-hero h1 .w-blue  { color:var(--blue); }
+    .shop-hero h1 .w-coral { color:var(--coral); }
+    .shop-hero p {
+      font-size:16px; color:var(--ink); font-weight:700; max-width:440px;
+      line-height:1.7; opacity:.8;
+      animation:popBounce .6s .16s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .hero-pills {
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;
+      animation:popBounce .6s .24s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .hero-pill {
+      display:inline-flex; align-items:center; gap:6px;
+      background:#fff; border:2.5px solid var(--ink); border-radius:999px;
+      padding:7px 16px; font-size:12px; font-weight:800;
+      box-shadow:3px 3px 0 var(--ink); transition:transform .2s;
+    }
+    .hero-pill:hover { transform:scale(1.06) rotate(-1deg); }
+    .shop-hero-right {
+      position:relative; z-index:1;
+      display:flex; flex-direction:column; gap:14px; align-items:center;
+    }
+    .hero-sticker {
+      background:#fff; border:3px solid var(--ink); border-radius:20px;
+      padding:40px 50px; font-family:'Good Pawoo', cursive; font-size:18px;
+      color:var(--ink); box-shadow:5px 5px 0 var(--ink); text-align:center;
+      line-height:1.4; white-space:nowrap;
+    }
+    .hero-sticker:nth-child(1) { transform:rotate(-6deg); background:var(--coral); color:#fff; }
+    .hero-sticker:nth-child(2) { transform:rotate(4deg);  background:var(--sky); }
+    .hero-sticker:nth-child(3) { transform:rotate(-3deg); background:var(--mint); color:#fff; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background:var(--bluedark); padding:18px 60px;
+      display:flex; align-items:center; justify-content:center;
+      gap:12px; flex-wrap:wrap; border-bottom:4px solid var(--ink);
+    }
+    .filter-label { color:rgba(255,255,255,.7); font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:1px; margin-right:6px; }
+    .cat-tab {
+      padding:9px 24px; border-radius:999px;
+      border:3px solid rgba(255,255,255,.3); background:transparent;
+      font-family:'Fredoka One',cursive;
+      font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:.5px;
+      color:#fff; cursor:pointer;
+      transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .cat-tab:hover { background:rgba(255,255,255,.15); border-color:#fff; transform:translateY(-2px); }
+    .cat-tab.active { background:var(--gold); color:var(--ink); border-color:var(--ink); box-shadow:3px 3px 0 rgba(0,0,0,.3); }
+
+    /* ── SHOP CONTENT ── */
+    .shop-content { padding:52px 60px 90px; background:#FFFBF4; }
+
+    .sec-header { display:flex; align-items:center; gap:16px; margin-bottom:28px; }
+    .sec-header-text h2 { font-family:'Good Pawoo', cursive; font-size:34px; color:var(--ink); line-height:1; }
+    .sec-header-text h2 span { color:var(--gold); }
+    .sec-header-text p { font-size:13px; color:#888; font-weight:700; margin-top:3px; }
+    .sec-divider { flex:1; height:3px; border-radius:999px; opacity:.35; }
+    .cat-group { margin-bottom:70px; }
+
+    /* ══ MAGAZINE GRIDS ══ */
+    .mag-grid-foods,
+.mag-grid-toys,
+.mag-grid-litters { font-family:'Fredoka One',cursive; display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.mag-grid-foods .pcard:nth-child(1),
+.mag-grid-toys .pcard:nth-child(1),
+.mag-grid-toys .pcard:nth-child(4),
+.mag-grid-litters .pcard { font-family:'Fredoka One',cursive; grid-row:auto; grid-column:auto; }
+
+    /* ══ PRODUCT CARD ══ */
+    .pcard {
+      border-radius:24px; overflow:hidden; cursor:pointer;
+      border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink);
+      display:flex; flex-direction:column;
+      transition:all .22s cubic-bezier(.34,1.56,.64,1); position:relative;
+    }
+    .pcard:hover { transform:translateY(-7px) rotate(-1deg); box-shadow:9px 11px 0 var(--ink); }
+    .pcard[data-cat="foods"]   { background:var(--peach); }
+    .pcard[data-cat="litters"] { background:#DFFFF0; }
+    .pcard[data-cat="toys"]    { background:#DEEFFE; }
+
+    .pcard-img { position:relative; overflow:hidden; min-height:160px; max-height:160px; height:160px; }
+.mag-grid-foods .pcard:nth-child(1) .pcard-img,
+.mag-grid-toys  .pcard:nth-child(1) .pcard-img { min-height:160px; max-height:160px; height:160px; }
+    .pcard-img img {
+      width:100%; height:100%; object-fit:cover; object-position:center;
+      display:block; transition:transform .5s ease;
+    }
+    .pcard:hover .pcard-img img { transform:scale(1.08); }
+
+    .pcard-ribbon {
+      position:absolute; top:14px; left:14px; z-index:2;
+      font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.5px;
+      padding:5px 14px; border-radius:999px; color:#fff;
+      border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);
+      font-family:'Fredoka One',cursive;
+    }
+    .pcard[data-cat="foods"]   .pcard-ribbon { background:var(--coral); }
+    .pcard[data-cat="litters"] .pcard-ribbon { background:var(--mint); }
+    .pcard[data-cat="toys"]    .pcard-ribbon { background:var(--blue); }
+
+    .pcard-price-tag {
+      position:absolute; top:14px; right:14px; z-index:2;
+      background:var(--yellow); color:var(--ink);
+      font-family:'Fredoka One',cursive; font-size:15px;
+      padding:5px 14px; border-radius:999px;
+      border:2.5px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+    }
+
+    .pcard-body {
+      padding:16px 20px 20px; border-top:3px solid var(--ink);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .pcard-name { font-family:'Good Pawoo', cursive; font-size:20px; color:var(--ink); line-height:1.1; }
+    .mag-grid-toys .pcard:not(:nth-child(1)) .pcard-name,
+    .mag-grid-foods .pcard:not(:nth-child(1)) .pcard-name { font-size:17px; }
+
+    .pcard-btn {
+      flex-shrink:0;
+      display:inline-flex; align-items:center; gap:5px;
+      padding:8px 18px; border-radius:999px;
+      font-family:'Calli Cat', sans-serif;
+      font-size:11px; font-weight:900; letter-spacing:.4px; text-transform:uppercase;
+      color:#fff; border:2.5px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+      cursor:pointer; transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .pcard[data-cat="foods"]   .pcard-btn { background:var(--coral); }
+    .pcard[data-cat="litters"] .pcard-btn { background:var(--mint); }
+    .pcard[data-cat="toys"]    .pcard-btn { background:var(--blue); }
+    .pcard-btn:hover { transform:translateY(-2px) scale(1.04); box-shadow:4px 5px 0 var(--ink); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(26,82,118,0.9);
+      z-index:999; display:flex; align-items:center; justify-content:center;
+      opacity:0; visibility:hidden; transition:all .3s; padding:20px;
+    }
+    .modal-overlay.open { opacity:1; visibility:visible; }
+    .modal-box {
+      background:#fff; border-radius:28px;
+      border:4px solid var(--ink); box-shadow:10px 10px 0 var(--ink);
+      max-width:620px; width:100%;
+      display:grid; grid-template-columns:1fr 1fr; overflow:hidden;
+      transform:scale(.88) translateY(24px);
+      transition:transform .38s cubic-bezier(.34,1.56,.64,1); position:relative;
+    }
+    .modal-overlay.open .modal-box { transform:scale(1) translateY(0); }
+    .modal-img-side { position:relative; min-height:300px; overflow:hidden; }
+    .modal-img-side img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease; }
+    .modal-overlay.open .modal-img-side img { transform:scale(1.04); }
+    .modal-img-overlay {
+      position:absolute; bottom:0; left:0; right:0; padding:14px 16px;
+      background:linear-gradient(to top, rgba(26,82,118,.85), transparent);
+    }
+    .modal-cat-badge {
+      display:inline-block; font-size:10px; font-weight:900;
+      text-transform:uppercase; letter-spacing:1px;
+      padding:4px 14px; border-radius:999px; color:#fff;
+      border:2px solid rgba(255,255,255,.5);
+    }
+    .modal-body {
+      padding:30px 26px; display:flex; flex-direction:column; gap:10px;
+      border-left:4px solid var(--ink); overflow-y:auto;
+    }
+    .modal-name { font-family:'Good Pawoo', cursive; font-size:28px; color:var(--ink); line-height:1.1; }
+    .modal-price { font-family:'Good Pawoo', cursive; font-size:26px; color:var(--gold); }
+    .modal-desc { font-size:13px; color:#666; line-height:1.7; font-weight:700; }
+    .modal-features { list-style:none; display:flex; flex-direction:column; gap:7px; margin-top:4px; }
+    .modal-features li { display:flex; align-items:center; gap:9px; font-size:12px; font-weight:800; color:var(--ink); }
+    .modal-check {
+      width:18px; height:18px; border-radius:6px; flex-shrink:0;
+      border:2px solid var(--ink); box-shadow:1px 1px 0 var(--ink);
+      display:flex; align-items:center; justify-content:center;
+      font-size:10px; font-weight:900; color:#fff;
+    }
+    .modal-close {
+      position:absolute; top:16px; right:16px; cursor:pointer;
+      background:var(--gold); width:38px; height:38px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px; font-weight:900; color:#fff;
+      border:3px solid var(--ink); box-shadow:3px 3px 0 var(--ink);
+      transition:all .2s cubic-bezier(.34,1.56,.64,1); z-index:10;
+    }
+    .modal-close:hover { background:var(--coral); transform:scale(1.1) rotate(12deg); }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: #B1CDDA ; border-top:4px solid var(--ink);
+      padding:52px 60px; text-align:center; position:relative; overflow:hidden;
+    }
+    .cta-section::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background-image:radial-gradient(circle, rgba(243,156,18,.12) 1.5px, transparent 1.5px);
+      background-size:24px 24px;
+    }
+    .cta-inner { position:relative; z-index:1; }
+    .cta-box {
+      background:#fff; border:3px solid var(--gold); border-radius:28px;
+      padding:36px 40px; max-width:520px; margin:0 auto; box-shadow:7px 7px 0 var(--gold);
+    }
+    .cta-icon { font-size:36px; display:block; margin-bottom:10px; animation:bounce 2s ease-in-out infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+    .cta-box h2 { font-family:'Good Pawoo',cursive; font-size:clamp(20px,2.5vw,30px); color:var(--ink); margin-bottom:8px; }
+    .cta-box h2 span { color:var(--coral); }
+    .cta-box p { font-size:13px; color:#777; line-height:1.7; font-weight:700; max-width:340px; margin:0 auto 22px; }
+    .cta-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--gold); color:var(--ink);
+      font-family:'Calli Cat',sans-serif; font-size:13px; font-weight:900;
+      text-transform:uppercase; letter-spacing:.5px;
+      padding:12px 34px; border-radius:999px; text-decoration:none;
+      border:2.5px solid var(--ink); box-shadow:4px 4px 0 var(--ink);
+      transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    .cta-btn:hover { background:var(--coral); color:#fff; transform:translateY(-3px); box-shadow:6px 6px 0 var(--ink); }
+
+    /* ── FOOTER ── */
+    .footer { background:#1A5276; overflow:hidden; }
+    .footer-body {
+      padding:50px 60px 0; display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr; gap:40px;
+      max-width:1200px; margin:0 auto;
+    }
+    .footer-brand .footer-logo { font-family:'Good Pawoo'; font-size:40px; color:var(--gold); line-height:1; margin-bottom:12px; }
+    .footer-brand p { font-size:14px; color:rgba(235,245,251,.75); line-height:1.7; max-width:240px; margin-bottom:20px; font-weight:700; }
+    .footer-socials { display:flex; gap:18px; }
+    .footer-socials a { font-size:14px; font-weight:700; color:var(--gold); text-decoration:none; }
+    .footer-col h4 { font-family:'Good Pawoo'; font-size:20px; color:var(--gold); margin-bottom:16px; }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-col ul li a { text-decoration:none; font-size:14px; color:rgba(235,245,251,.75); transition:color .2s; font-weight:700; }
+    .footer-col ul li a:hover { color:var(--gold); }
+    .footer-contact-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; }
+    .footer-contact-item span:first-child { font-size:18px; flex-shrink:0; margin-top:2px; }
+    .footer-contact-item span:last-child { font-size:14px; color:rgba(235,245,251,.75); line-height:1.5; font-weight:700; }
+    .footer-bottom {
+      margin-top:36px; border-top:1px solid rgba(243,156,18,.25);
+      padding:18px 60px; display:flex; justify-content:space-between; align-items:center;
+      max-width:1200px; margin-left:auto; margin-right:auto;
+    }
+    .footer-bottom-text { font-size:13px; color:rgba(235,245,251,.45); font-weight:700; }
+
+    @keyframes popBounce {
+      from { opacity:0; transform:scale(.8) translateY(16px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    @media (max-width:960px) {
+      .shop-hero { grid-template-columns:1fr; }
+      .shop-hero-right { flex-direction:row; flex-wrap:wrap; }
+      .mag-grid-foods { grid-template-columns:1fr 1fr; }
+      .mag-grid-foods .pcard:nth-child(1) { grid-row:auto; }
+      .mag-grid-toys { grid-template-columns:1fr 1fr; }
+      .mag-grid-toys .pcard:nth-child(1) { grid-column:auto; grid-row:auto; }
+      .mag-grid-toys .pcard:nth-child(4) { grid-column:auto; }
+      .mag-grid-litters .pcard { grid-column:auto; }
+      .modal-box { grid-template-columns:1fr; }
+      .modal-img-side { min-height:220px; }
+      .modal-body { border-left:none; border-top:4px solid var(--ink); }
+      .shop-content { padding:36px 28px 60px; }
+      .filter-bar { padding:16px 24px; }
+      .footer-body { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:600px) {
+      .shop-hero { padding:40px 24px; }
+      .mag-grid-foods, .mag-grid-toys, .mag-grid-litters { grid-template-columns:1fr; }
+      .footer-body { grid-template-columns:1fr; padding:40px 28px 0; }
+      .footer-bottom { flex-direction:column; gap:8px; padding:18px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <div class="nav-capsule">
+    <a href="Index.html">Home</a>
+    <a href="service.html">Service</a>
+    <a href="About.html">About</a>
+    <a href="pet-tures.html">Pet-tures</a>
+    <a href="review.html">Pet-view</a>
+    <a href="shop.html" class="active">Shop</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="shop-hero">
+  <div class="shop-hero-left">
+    <div class="shop-hero-eyebrow">PurrCare Shop</div>
+    <h1>Shop the <span class="w-blue">best</span><br>for your <span class="w-coral">pets!</span></h1>
+    <p>Foods, toys, litters & more — handpicked with love for every furry, fluffy, and feathered friend.</p>
+    <div class="hero-pills">
+      <div class="hero-pill"> Pet-Approved</div>
+      <div class="hero-pill">Quality Picks</div>
+      <div class="hero-pill">In-Store & Pickup</div>
+    </div>
+  </div>
+  <div class="shop-hero-right">
+    <div class="hero-sticker">Foods</div>
+    <div class="hero-sticker">Toys</div>
+    <div class="hero-sticker">Litters</div>
+  </div>
+</section>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <span class="filter-label">Browse:</span>
+  <button class="cat-tab active" onclick="filterShop('all',this)"> All (9)</button>
+  <button class="cat-tab" onclick="filterShop('foods',this)"> Foods (4)</button>
+  <button class="cat-tab" onclick="filterShop('litters',this)"> Litters (1)</button>
+  <button class="cat-tab" onclick="filterShop('toys',this)"> Toys (4)</button>
+</div>
+
+<!-- ── SHOP CONTENT ── -->
+<div class="shop-content">
+
+  <!-- FOODS -->
+  <div class="cat-group" data-cat="foods">
+    <div class="sec-header">
+      <div class="sec-header-text">
+        <h2>Pet <span>Foods</span></h2>
+        <p>Nutritious meals your pets will absolutely love</p>
+      </div>
+      <div class="sec-divider" style="background:var(--coral);"></div>
+    </div>
+    <div class="mag-grid-foods">
+      <div class="pcard" data-cat="foods" onclick="openModal('foods','Cat Food','foods/CAT FOOD.png','₱ 299.00','Premium nutrition formula specially made for your feline friend.',['Rich in protein & taurine','Supports coat health','All life stages','Vet recommended'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Cat</span><span class="pcard-price-tag">₱ 299</span><img src="foods/CAT FOOD.png" alt="Cat Food" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Cat Food</div><button class="pcard-btn">View</button></div>
+      </div>
+      <div class="pcard" data-cat="foods" onclick="openModal('foods','Dog Food','foods/DOG FOOD.png','₱ 349.00','Balanced and tasty formula for your loyal doggo.',['High protein recipe','Supports joint health','No artificial colors','All breeds'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Dog</span><span class="pcard-price-tag">₱ 349</span><img src="foods/DOG FOOD.png" alt="Dog Food" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Dog Food</div><button class="pcard-btn">View</button></div>
+      </div>
+      <div class="pcard" data-cat="foods" onclick="openModal('foods','Hamster Food','foods/HAMSTER FOOD.png','₱ 149.00','Tiny bites packed with nutrients for your little hamster.',['Seed & grain blend','Added vitamins','No sugar added','Small animal safe'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Hamster</span><span class="pcard-price-tag">₱ 149</span><img src="foods/HAMSTER FOOD.png" alt="Hamster Food" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Hamster Food</div><button class="pcard-btn">View</button></div>
+      </div>
+      <div class="pcard" data-cat="foods" onclick="openModal('foods','Rabbit Food','foods/RABBIT FOOD.png','₱ 199.00','Fiber-rich pellets and hay blend for your fluffy bunny.',['High fiber formula','Timothy hay blend','Supports digestion','No artificial additives'])">
+        <div class="pcard-img"><span class="pcard-ribbon"> Rabbit</span><span class="pcard-price-tag">₱ 199</span><img src="foods/RABBIT FOOD.png" alt="Rabbit Food" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Rabbit Food</div><button class="pcard-btn">View</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LITTERS -->
+  <div class="cat-group" data-cat="litters">
+    <div class="sec-header">
+      <div class="sec-header-text">
+        <h2>Pet <span>Litters</span></h2>
+        <p>Keep things clean and fresh every day</p>
+      </div>
+      <div class="sec-divider" style="background:var(--mint);"></div>
+    </div>
+    <div class="mag-grid-litters">
+      <div class="pcard" data-cat="litters" onclick="openModal('litters','Pet Litter','litters/1 (2).png','₱ 249.00','Odor-control clumping litter perfect for cats and small pets.',['Odor neutralizing','Clumping formula','Dust-free','Long lasting'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Litter</span><span class="pcard-price-tag">₱ 249</span><img src="litters/1 (2).png" alt="Pet Litter" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Pet Litter</div><button class="pcard-btn">View</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOYS -->
+  <div class="cat-group" data-cat="toys">
+    <div class="sec-header">
+      <div class="sec-header-text">
+        <h2>Pet <span>Toys</span></h2>
+        <p>Playtime guaranteed — tails will wag & paws will grab!</p>
+      </div>
+      <div class="sec-divider" style="background:var(--sky);"></div>
+    </div>
+    <div class="mag-grid-toys">
+      <div class="pcard" data-cat="toys" onclick="openModal('toys','Cat Nip','toys/CAT NIP.png','₱ 129.00','Irresistible catnip toy that keeps your kitty entertained for hours.',['100% organic catnip','Safe & non-toxic','Encourages play','Great for stress relief'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Cat</span><span class="pcard-price-tag">₱ 129</span><img src="toys/CAT NIP.png" alt="Cat Nip" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Cat Nip</div><button class="pcard-btn">View</button></div>
+      </div>
+      <div class="pcard" data-cat="toys" onclick="openModal('toys','Dog Toy','toys/DOG TOY.png','₱ 179.00','Durable chew toy designed for playful pups of all sizes.',['Non-toxic rubber','Satisfies chewing urge','Easy to clean','All dog sizes'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Dog</span><span class="pcard-price-tag">₱ 179</span><img src="toys/DOG TOY.png" alt="Dog Toy" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Dog Toy</div><button class="pcard-btn">View</button></div>
+      </div>
+      <div class="pcard" data-cat="toys" onclick="openModal('toys','Hamster Toy','toys/HAMSTER TOY.png','₱ 99.00','Fun exercise wheel and chew toy set for your tiny adventurer.',['Safe chewable material','Promotes exercise','Compact size','Easy to install'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Hamster</span><span class="pcard-price-tag">₱ 99</span><img src="toys/HAMSTER TOY.png" alt="Hamster Toy" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Hamster Toy</div><button class="pcard-btn">View</button></div>
+      </div>
+      <div class="pcard" data-cat="toys" onclick="openModal('toys','Rabbit Toy','toys/RABBIT TOY.png','₱ 149.00','Chew and toss toy that keeps bunnies active and entertained.',['Natural wood material','Bunny-safe finish','Encourages foraging','Reduces boredom'])">
+        <div class="pcard-img"><span class="pcard-ribbon">Rabbit</span><span class="pcard-price-tag">₱ 149</span><img src="toys/RABBIT TOY.png" alt="Rabbit Toy" loading="lazy"/></div>
+        <div class="pcard-body"><div class="pcard-name">Rabbit Toy</div><button class="pcard-btn">View</button></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleModalClick(event)">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <div class="modal-box">
+    <div class="modal-img-side">
+      <img id="modalImg" src="" alt=""/>
+      <div class="modal-img-overlay">
+        <span class="modal-cat-badge" id="modalBadge">Category</span>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-name"  id="modalName">Product Name</div>
+      <div class="modal-price" id="modalPrice">₱ 0.00</div>
+      <p   class="modal-desc"  id="modalDesc">Description.</p>
+      <ul  class="modal-features" id="modalFeatures"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-box">
+      <span class="cta-icon">🐾</span>
+      <h2>Need a <span>Service</span> too?</h2>
+      <p>Book grooming, boarding, or a health check for your pet today!</p>
+      <a href="service.html" class="cta-btn">See Services →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="footer">
+  <div class="footer-body">
+    <div class="footer-brand">
+      <div class="footer-logo">ฅ^•ﻌ•^ฅ</div>
+      <div class="footer-logo">PurrCare co.</div>
+      <p>Where every pet is treated like family — with love, care, and a whole lot of paw-sion.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/won_jww" target="_blank" rel="noopener">◙</a>
+        <a href="https://www.twitter.com/aea29858" target="_blank" rel="noopener">✕</a>
+        <a href="https://mail.google.com/mail/?view=cm&to=aea29858@gmail.com" target="_blank">✉</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="Index.html">Home</a></li>
+        <li><a href="service.html">Service</a></li>
+        <li><a href="About.html">About</a></li>
+        <li><a href="pet-tures.html">Pet-tures</a></li>
+        <li><a href="review.html">Pet-view</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Grooming</a></li>
+        <li><a href="#">Boarding</a></li>
+        <li><a href="#">Feeding</a></li>
+        <li><a href="#">Health Check</a></li>
+        <li><a href="#">Playtime</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <div class="footer-contact-item"><span>⟟</span><span>Pasig City, Metro Manila, Philippines</span></div>
+      <div class="footer-contact-item"><span>✉</span><span>helloPurrCareco.ph</span></div>
+      <div class="footer-contact-item"><span>⏲</span><span>Mon to Sun: Open all day!</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-text">© PurrCare co. — Made with love for pets everywhere</div>
+  </div>
+</div>
+
+<script>
+  function filterShop(cat, btn) {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.cat-group').forEach(g => {
+      g.style.display = (cat === 'all' || g.dataset.cat === cat) ? 'block' : 'none';
+    });
+  }
+
+  var checkColors = { foods:'#FF6B6B', litters:'#2ECC71', toys:'#2E86C1' };
+  var badgeBg     = { foods:'#FF6B6B', litters:'#2ECC71', toys:'#2E86C1' };
+
+  function openModal(cat, name, img, price, desc, features) {
+    document.getElementById('modalImg').src  = img;
+    document.getElementById('modalImg').alt  = name;
+    document.getElementById('modalName').textContent  = name;
+    document.getElementById('modalPrice').textContent = price;
+    document.getElementById('modalDesc').textContent  = desc;
+    var badge = document.getElementById('modalBadge');
+    badge.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+    badge.style.background = badgeBg[cat] || '#F39C12';
+    var ul = document.getElementById('modalFeatures');
+    ul.innerHTML = '';
+    features.forEach(f => {
+      var li = document.createElement('li');
+      var chk = document.createElement('span');
+      chk.className = 'modal-check';
+      chk.textContent = '✓';
+      chk.style.background = checkColors[cat] || '#F39C12';
+      li.appendChild(chk);
+      li.appendChild(document.createTextNode(f));
+      ul.appendChild(li);
+    });
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleModalClick(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
